@@ -1,0 +1,19 @@
+JustMarkets/Common/Collection+common.swift
+  s_a7ab280115cefc::t_b7bbc09a205800 1-15
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.6.10",
+  "base_commit_sha": "4a668c9cc805d94fbabedc56d6a95cad2320c434",
+  "prompts": {},
+  "sessions": {
+    "s_a7ab280115cefc": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "a525711c-5333-462e-b05d-ce621a0b02a4",
+        "model": "claude-opus-5"
+      },
+      "human_author": "Mykhailo Zhutov <zhutov.misha@gmail.com>"
+    }
+  }
+}
