@@ -31,6 +31,6 @@ struct NetworkConfiguration {
     }
 
     static var production: NetworkConfiguration {
-        NetworkConfiguration(baseURL: URL(string: "https://api.example.com")!)
+        NetworkConfiguration(baseURL: URL(string: "https://biquote.io/api")!)
     }
 }
