@@ -1,0 +1,23 @@
+JustMarkets/Features/Markets/Data/MarketSymbolDTO.swift
+  s_cac268cd155be9::t_47b6a08ed4e167 1-25
+JustMarkets/Features/Markets/Data/MarketType.swift
+  s_cac268cd155be9::t_8c257a349a49b2 1-18
+JustMarkets/Features/Markets/Data/MarketsEndpoint.swift
+  s_cac268cd155be9::t_7ebecb68d02dcb 1-18
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.6.10",
+  "base_commit_sha": "1deac3b39e45ebc2d0d9fb30d967e0494931d5ff",
+  "prompts": {},
+  "sessions": {
+    "s_cac268cd155be9": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "98f01ae3-bf32-441b-ab24-09963006cb01",
+        "model": "claude-opus-5"
+      },
+      "human_author": "Mykhailo Zhutov <zhutov.misha@gmail.com>"
+    }
+  }
+}
