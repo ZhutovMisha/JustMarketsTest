@@ -1,0 +1,21 @@
+JustMarkets/Core/Network/Endpoint.swift
+  s_cac268cd155be9::t_1af53f77d39e26 1-27
+JustMarkets/Core/Network/NetworkConfiguration.swift
+  s_cac268cd155be9::t_abb75a2b89b964 1-36
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.6.10",
+  "base_commit_sha": "b1bc60e70515726383c29a046ecf79cd7510d96e",
+  "prompts": {},
+  "sessions": {
+    "s_cac268cd155be9": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "98f01ae3-bf32-441b-ab24-09963006cb01",
+        "model": "claude-opus-5"
+      },
+      "human_author": "Mykhailo Zhutov <zhutov.misha@gmail.com>"
+    }
+  }
+}
