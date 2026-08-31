@@ -1,0 +1,95 @@
+# CodeRabbit configuration for JustMarkets.
+# The project's own conventions live in docs/ — the instructions below mirror
+# them so reviews enforce those rules instead of generic Swift advice.
+
+language: en-US
+
+reviews:
+  profile: assertive
+  request_changes_workflow: false
+  high_level_summary: true
+  review_status: true
+  poem: false
+
+  auto_review:
+    enabled: true
+    drafts: false
+
+  path_filters:
+    - "!**/*.pbxproj"
+    - "!**/*.xcworkspacedata"
+    - "!**/xcuserdata/**"
+    - "!**/Package.resolved"
+    - "!**/*.xcassets/**"
+    - "!JustMarkets/Resources/*.json"
+
+  path_instructions:
+    - path: "JustMarkets/**/*.swift"
+      instructions: >
+        Swift 5 language mode, iOS 17+, UIKit only — no SwiftUI. Layout is
+        programmatic via SnapKit; flag any storyboard or xib UI.
+
+        Every closure-typed property, parameter and callback must be a named
+        typealias declared on the type that publishes the event (OnChange,
+        OnError, OnTick). Flag inline function types such as
+        `var onTapped: (() -> Void)?`.
+
+        Member order inside a type: typealias, public nested struct/enum,
+        public computed, public stored, private nested types, private computed,
+        private stored, init/deinit, public methods, private methods.
+
+        A protocol is only justified by a real seam — a test double or a second
+        implementation. Flag protocols with a single conformance and no double.
+
+        There is no use-case layer: ViewModels take repository protocols and
+        compose them. Flag any new UseCase/Interactor type.
+
+    - path: "JustMarkets/**/Presentation/*ViewModel.swift"
+      instructions: >
+        ViewModels own asynchrony. Public methods are synchronous and return
+        Void; the ViewModel starts its own Task, stores it in a property, and
+        cancels it in deinit. Flag any Task that is created without being
+        stored, since deinit cannot cancel it.
+
+        Cancellation is not an error: before reporting a caught error, check
+        Task.isCancelled. A superseded load must not surface an alert and must
+        not stop an indicator a newer load owns.
+
+        Formatting belongs in MarketsProcessor; business rules such as
+        staleness belong in the domain (MarketStatus). Flag number or date
+        formatting done inside a ViewModel.
+
+    - path: "JustMarkets/**/Presentation/*ViewController.swift"
+      instructions: >
+        ViewControllers bind callbacks and render. They must contain no Task
+        and no do/catch — that work belongs in the ViewModel.
+
+        Per-tick quote updates write directly into visible cells. Flag any
+        live-update path that goes through a diffable snapshot
+        (reconfigureItems/apply), which re-measures cells and fights scrolling.
+
+    - path: "JustMarkets/Features/Markets/Data/**/*.swift"
+      instructions: >
+        The symbols subscribed to the live feed are derived from MarketsFilter
+        using the same category and favourites as the visible list — one source
+        of truth for the visible set and the subscription. Flag any second,
+        independently derived symbol set.
+
+        The repository serves more than one screen at a time (markets list and
+        symbol detail). Flag any change that lets a new subscriber displace an
+        existing one.
+
+    - path: "JustMarketsTests/**/*.swift"
+      instructions: >
+        Tests use Swift Testing (@Suite / @Test / #expect), not XCTest. The one
+        exception is memory-leak checks, which need XCTestCase.addTeardownBlock.
+
+        Repositories are the seam: tests stub repository spies rather than
+        mocking lower layers. Prefer asserting on observable behaviour over
+        interaction counts.
+
+        Timing-sensitive tests must wait on a real time budget, never on a bare
+        Task.yield().
+
+chat:
+  auto_reply: true
