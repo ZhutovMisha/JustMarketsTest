@@ -33,6 +33,7 @@ final class MarketsProcessor {
         return formatter
     }()
     
+    
     private let changeFormatter: NumberFormatter = {
         let formatter = NumberFormatter()
         formatter.numberStyle = .decimal
