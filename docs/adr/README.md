@@ -11,7 +11,7 @@ ask "why on earth is it done this way". Not for routine fixes.
 | # | Decision | Status |
 | --- | --- | --- |
 | [0001](0001-mvvm-clean-coordinator.md) | MVVM + Clean layering with a coordinator | Accepted |
-| [0002](0002-mainactor-default-isolation.md) | MainActor default isolation instead of actors | Accepted |
+| [0002](0002-mainactor-default-isolation.md) | MainActor default isolation instead of actors | Superseded by 0012 |
 | [0003](0003-replay-latest-quote.md) | Replay the latest quote to new subscribers | Accepted |
 | [0004](0004-subscription-scoping.md) | Scope subscriptions per consumer and per category | Accepted |
 | [0005](0005-quote-outranks-hasdata.md) | A real quote outranks `hasData` metadata | Accepted |
@@ -21,5 +21,6 @@ ask "why on earth is it done this way". Not for routine fixes.
 | [0009](0009-ordered-favourites.md) | Favourites are ordered, newest first | Accepted |
 | [0010](0010-use-case-shape.md) | One protocol, one `execute`, extracted on a second caller | Superseded by 0011 |
 | [0011](0011-no-use-case-layer.md) | No use-case layer — ViewModels call repositories | Accepted |
+| [0012](0012-explicit-mainactor.md) | Explicit `@MainActor` instead of default isolation | Accepted |
 
 Numbering is sequential and never reused. Use [the template](template.md).

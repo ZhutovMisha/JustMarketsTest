@@ -151,14 +151,14 @@ a second declaration joins the file.
 - Booleans read as assertions: `isActive`, `hasData`, `showsSeparator`.
 - Factory methods are `make…`: `makeRow`, `makeLayout`, `makeMarketsSection`.
 - Domain rule namespaces are plural nouns with static members: `MarketsFilter`,
-  `MarketsMapper`. Mark them `nonisolated enum` — no instances, no isolation.
+  `MarketsMapper`. Plain `enum` — no instances, no isolation.
 - Repository implementations carry their source: `RemoteMarketsRepository`,
   `CoreDataFavoritesRepository`.
 
 ## Concurrency
 
-- Do not annotate `@MainActor` where default isolation already provides it. Mark
-  `nonisolated` deliberately, on value types and pure rules.
+- Isolation is opt-in: annotate `@MainActor` on the types that need the main
+  thread. Leave value types and pure rules unannotated.
 - Stored `Task`s are cancelled in `deinit`.
 - `Task { [weak self] in … }` unless the task is short and self-contained.
 - Check `Task.isCancelled` before turning a caught error into user-visible state.

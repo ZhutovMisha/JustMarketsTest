@@ -1,7 +1,9 @@
 # Testing
 
-Swift Testing, not XCTest: `@Suite`, `@Test`, `#expect`. 48 tests today, all
-green, and they are expected to stay that way on every run.
+Swift Testing for behaviour: `@Suite`, `@Test`, `#expect`. XCTest is used for
+one thing only — memory-leak checks, which need `addTeardownBlock`, and which
+Swift Testing has no equivalent hook for. 20 behaviour tests and 2 leak tests
+today, all green, and they are expected to stay that way on every run.
 
 ## What is worth testing
 

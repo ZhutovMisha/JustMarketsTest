@@ -34,8 +34,8 @@ nothing else — no thresholds, no branching on market semantics.
 **Domain** — value types (`MarketSymbol`, `MarketQuote`, `MarketCandle`),
 repository protocols — the only seam the app has, and the one every test double
 stands on — and pure rules: `MarketsFilter` (category, search,
-favourite pinning) and `MarketStatus` (live / stale / closed / no data). All
-`nonisolated`, all trivially testable, no framework imports beyond Foundation.
+favourite pinning) and `MarketStatus` (live / stale / closed / no data). None
+carry isolation, all trivially testable, no framework imports beyond Foundation.
 
 **Data** — `RemoteMarketsRepository` combines HTTP (symbol list) with the live
 feed, caches the latest quote per symbol, and multicasts updates as
@@ -77,14 +77,16 @@ See [ADR-0003](adr/0003-replay-latest-quote.md) and
 
 ## Concurrency
 
-The app target sets `SWIFT_DEFAULT_ACTOR_ISOLATION = MainActor`. Classes without
-an explicit annotation — view models, repositories, the socket wrapper, the
-throttle — are MainActor-isolated. Domain value types and pure rule namespaces
-are explicitly `nonisolated`.
+The app builds in Swift 5 language mode with no default isolation, so isolation
+is opt-in. The types that must run on the main thread — view models,
+repositories, the socket wrapper, the throttle, the coordinator, the container —
+are annotated `@MainActor`. Domain value types and pure rule namespaces carry no
+isolation at all.
 
 The data layer is therefore already serialised, which is why it is written with
 plain classes and not actors. Converting them to actors would force `await` into
 synchronous callbacks and allow tick reordering. The reasoning is in
+[ADR-0012](adr/0012-explicit-mainactor.md), which supersedes
 [ADR-0002](adr/0002-mainactor-default-isolation.md).
 
 ## Composition

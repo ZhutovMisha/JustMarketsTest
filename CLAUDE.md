@@ -6,12 +6,14 @@ SignalR hub and are throttled before reaching the UI.
 
 ## Stack
 
-- Swift 6, iOS 17+, UIKit (no SwiftUI), programmatic layout via SnapKit
-- `SWIFT_DEFAULT_ACTOR_ISOLATION = MainActor` — everything is MainActor unless
-  explicitly marked `nonisolated`. Read [ADR-0002](docs/adr/0002-mainactor-default-isolation.md)
-  before reaching for an `actor`.
-- Alamofire (HTTP), SignalR-Client-Swift (live feed), DGCharts (chart)
-- Swift Testing (`@Suite` / `@Test` / `#expect`), not XCTest
+- Swift 5 language mode, iOS 17+, UIKit (no SwiftUI), programmatic layout via SnapKit
+- Isolation is explicit: nothing is MainActor unless annotated. The types that
+  need the main actor — view models, repositories, the socket wrapper, the
+  throttle, the coordinator — carry `@MainActor`. Read
+  [ADR-0012](docs/adr/0012-explicit-mainactor.md) before reaching for an `actor`.
+- Alamofire (HTTP), SignalR-Client-Swift (live feed), DGCharts (chart), Lottie (splash)
+- Swift Testing (`@Suite` / `@Test` / `#expect`) for behaviour. XCTest only for
+  memory-leak checks, which need `addTeardownBlock`.
 
 ## Commands
 

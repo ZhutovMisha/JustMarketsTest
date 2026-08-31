@@ -55,7 +55,7 @@ affordable for a table.
 
 ## Strategy as a namespace
 
-Pure rules are `nonisolated enum` namespaces with static members —
+Pure rules are plain `enum` namespaces with static members —
 `MarketsFilter`, `MarketsMapper`, `MarketStatus`'s initialiser. No instances, no
 state, no isolation, trivial to test. Prefer this to a protocol plus a class when
 there is only one implementation and no need to swap it.

@@ -1,6 +1,6 @@
 # ADR-0002: MainActor default isolation instead of actors
 
-- **Status**: Accepted
+- **Status**: Superseded by [ADR-0012](0012-explicit-mainactor.md)
 - **Date**: 2026-08-30
 
 ## Context
