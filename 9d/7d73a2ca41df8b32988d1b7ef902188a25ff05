@@ -1,0 +1,29 @@
+JustMarkets/Features/Splash/Presentation/SplashViewController.swift
+  s_ee95b00c6f3872::t_5618a1ffd4ba4b 1-29
+JustMarkets/Features/Splash/Presentation/View/SplashMainView.swift
+  s_ee95b00c6f3872::t_5618a1ffd4ba4b 1-56
+JustMarkets/App/Assembly/AppContainer.swift
+  s_ee95b00c6f3872::t_fec067cedec61d 39-42
+JustMarkets/App/Coordinator/AppCoordinator.swift
+  s_ee95b00c6f3872::t_fec067cedec61d 13-14,18-19,36-43,45,53-65
+  s_ee95b00c6f3872::t_0b18b92f41e5bf 66
+JustMarkets/App/SceneDelegate.swift
+  s_ee95b00c6f3872::t_fec067cedec61d 28
+  s_ee95b00c6f3872::t_05fb303cdcd344 29
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.6.10",
+  "base_commit_sha": "9d7d73a2ca41df8b32988d1b7ef902188a25ff05",
+  "prompts": {},
+  "sessions": {
+    "s_ee95b00c6f3872": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "a0b29121-265e-456c-95c8-918867607432",
+        "model": "claude-opus-5"
+      },
+      "human_author": "Mykhailo Zhutov <zhutov.misha@gmail.com>"
+    }
+  }
+}
