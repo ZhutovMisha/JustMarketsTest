@@ -6,7 +6,7 @@ hub and are throttled before reaching the UI.
 
 ## Demo
 
-<!-- Add the screen recording here -->
+https://github.com/user-attachments/assets/e09169ea-b542-45bb-b3ce-3d9b8728185f
 
 ## Features
 
