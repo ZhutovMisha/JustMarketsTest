@@ -17,7 +17,7 @@ final class SymbolDetailViewModel {
     
     struct Dependencies {
         
-        let detailsRepository: RemoteSymbolDetailsRepository
+        let detailsRepository: SymbolDetailsRepository
         let marketsRepository: MarketsRepository
         let processor: MarketsProcessor
     }
@@ -104,20 +104,30 @@ final class SymbolDetailViewModel {
         onLoadingChanged?(true)
         
         defer {
-            onLoadingChanged?(false)
+            // A newer load already owns the indicator.
+            if !Task.isCancelled {
+                onLoadingChanged?(false)
+            }
         }
         
         do {
             async let details = dependencies.detailsRepository.details(for: symbol.name)
             async let candles = dependencies.detailsRepository.candles(for: symbol.name, interval: selectedInterval)
             
-            self.details = try await details
-            self.candles = try await candles
+            let loadedDetails = try await details
+            let loadedCandles = try await candles
+            
+            guard !Task.isCancelled else { return }
+            
+            self.details = loadedDetails
+            self.candles = loadedCandles
             
             onChange?()
             
             observeQuotes()
         } catch {
+            guard !Task.isCancelled else { return }
+            
             onError?(error)
         }
     }
@@ -138,14 +148,23 @@ final class SymbolDetailViewModel {
         onLoadingChanged?(true)
         
         defer {
-            onLoadingChanged?(false)
+            // A newer load already owns the indicator.
+            if !Task.isCancelled {
+                onLoadingChanged?(false)
+            }
         }
         
         do {
-            candles = try await dependencies.detailsRepository.candles(for: symbol.name, interval: interval)
+            let loaded = try await dependencies.detailsRepository.candles(for: symbol.name, interval: interval)
+            
+            guard !Task.isCancelled else { return }
+            
+            candles = loaded
             
             onChange?()
         } catch {
+            guard !Task.isCancelled else { return }
+            
             onError?(error)
         }
     }

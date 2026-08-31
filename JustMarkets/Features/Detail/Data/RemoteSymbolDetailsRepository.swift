@@ -6,7 +6,7 @@
 //
 
 @MainActor
-final class RemoteSymbolDetailsRepository {
+final class RemoteSymbolDetailsRepository: SymbolDetailsRepository {
     
     private static let candlesLimit = 100
     
