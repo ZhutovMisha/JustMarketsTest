@@ -27,7 +27,7 @@ final class CoreDataFavoritesRepository: FavoritesRepository {
             .compactMap(\.symbol)
     }
     
-    func toggle(_ symbol: String) async throws -> [String] {
+    func toggle(_ symbol: String) throws -> [String] {
         let context = stack.viewContext
         
         let request = FavoriteSymbolEntity.fetchRequest()
@@ -41,7 +41,15 @@ final class CoreDataFavoritesRepository: FavoritesRepository {
             favorite.dateAdded = Date()
         }
         
-        try stack.save()
+        do {
+            try stack.save()
+        } catch {
+            // Otherwise the change stays pending in the view context: later
+            // reads see it, and the next successful save commits it silently.
+            context.rollback()
+            
+            throw error
+        }
         
         return try favorites()
     }

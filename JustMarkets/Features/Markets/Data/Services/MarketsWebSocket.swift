@@ -103,6 +103,13 @@ final class MarketsWebSocket: MarketsQuotesDataSource {
     }
     
     private func handle(_ state: MarketConnectionState) {
+        if state == .disconnected {
+            // Terminal: SignalR has exhausted its retry ladder and closed. The
+            // symbols are kept so a later connect() can start a fresh hub,
+            // which the isStarted guard would otherwise make unreachable.
+            isStarted = false
+        }
+        
         onConnectionChanged?(state)
         
         guard state == .connected else { return }
@@ -116,7 +123,8 @@ final class MarketsWebSocket: MarketsQuotesDataSource {
         hubConnection.invoke(method: Constants.subscribe, arguments: [symbols]) { [weak self] error in
             guard error != nil else { return }
             
-            self?.onConnectionChanged?(.disconnected)
+            // Same terminal transition as a close, so the state stays coherent.
+            self?.handle(.disconnected)
         }
     }
 }

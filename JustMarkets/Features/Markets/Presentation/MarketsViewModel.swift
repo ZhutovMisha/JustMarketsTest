@@ -107,7 +107,15 @@ final class MarketsViewModel {
             }
             
             do {
-                symbols = try await dependencies.marketsRepository.fetchSymbols()
+                let loaded = try await dependencies.marketsRepository.fetchSymbols()
+                
+                // A newer load already owns the state: publishing here would
+                // overwrite it and resubscribe to the stale symbol set.
+                guard !Task.isCancelled else {
+                    return
+                }
+                
+                symbols = loaded
                 favorites = try dependencies.favoritesRepository.favorites()
                 
                 refreshVisibleSymbols()
@@ -151,24 +159,14 @@ final class MarketsViewModel {
     }
     
     func toggleFavorite(for symbol: String) {
-        Task { [weak self] in
-            guard let self else {
-                return
-            }
+        do {
+            favorites = try dependencies.favoritesRepository.toggle(symbol)
             
-            do {
-                favorites = try await dependencies.favoritesRepository.toggle(symbol)
-                
-                refreshVisibleSymbols()
-                onChange?()
-                resubscribeIfNeeded()
-            } catch {
-                guard !Task.isCancelled else {
-                    return
-                }
-                
-                onError?(error)
-            }
+            refreshVisibleSymbols()
+            onChange?()
+            resubscribeIfNeeded()
+        } catch {
+            onError?(error)
         }
     }
 }
@@ -206,7 +204,10 @@ private extension MarketsViewModel {
         )
         .map(\.name)
         
-        guard names != subscribedNames else { return }
+        // MarketsFilter pins favourites to the front, so the order changes on
+        // every star tap while the set stays the same. Only a different set is
+        // worth tearing the stream down for.
+        guard Set(names) != Set(subscribedNames) else { return }
         
         subscribedNames = names
         let stream = dependencies.marketsRepository.updates(for: names)

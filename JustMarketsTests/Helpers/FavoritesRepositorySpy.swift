@@ -32,7 +32,7 @@ extension FavoritesRepositorySpy: FavoritesRepository {
         return stored
     }
     
-    func toggle(_ symbol: String) async throws -> [String] {
+    func toggle(_ symbol: String) throws -> [String] {
         messages.append(.toggle(symbol))
         
         if let index = stored.firstIndex(of: symbol) {

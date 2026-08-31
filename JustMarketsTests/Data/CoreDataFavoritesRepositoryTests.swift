@@ -13,11 +13,11 @@ import Testing
 struct CoreDataFavoritesRepositoryTests {
 
     @Test
-    func toggle_twice_addsThenRemovesSymbol() async throws {
+    func toggle_twice_addsThenRemovesSymbol() throws {
         let sut = try makeSUT()
         
-        let afterAdding = try await sut.toggle("EURUSD")
-        let afterRemoving = try await sut.toggle("EURUSD")
+        let afterAdding = try sut.toggle("EURUSD")
+        let afterRemoving = try sut.toggle("EURUSD")
         
         #expect(afterAdding == ["EURUSD"])
         #expect(afterRemoving.isEmpty)

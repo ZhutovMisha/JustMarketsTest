@@ -8,5 +8,5 @@
 protocol FavoritesRepository {
     
     func favorites() throws -> [String]
-    func toggle(_ symbol: String) async throws -> [String]
+    func toggle(_ symbol: String) throws -> [String]
 }
