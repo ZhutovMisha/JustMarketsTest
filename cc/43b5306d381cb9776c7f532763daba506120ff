@@ -1,0 +1,124 @@
+JustMarkets.xcodeproj/project.pbxproj
+  s_de8da96018bd92::t_b725e704c2f0f7 266,300,430,443,455,468
+JustMarkets/Features/Markets/Domain/Models/MarketStatus.swift
+  s_de8da96018bd92::t_4da4ef6e265534 9
+JustMarkets/Features/Detail/Data/DTO/SymbolDetailsDTO.swift
+  s_de8da96018bd92::t_f3f5a7d865da6e 10
+JustMarkets/Features/Markets/Data/Services/MarketsWebSocket.swift
+  s_de8da96018bd92::t_a92d5f12682292 83-85,87,91
+JustMarketsTests/Helpers/NetworkClientSpy.swift
+  s_de8da96018bd92::t_4da4ef6e265534 32
+JustMarkets/Features/Markets/Presentation/View/MarketsMainView.swift
+  s_de8da96018bd92::t_68089a99494de4 22-35
+JustMarkets/Features/Detail/Domain/SymbolDetails.swift
+  s_de8da96018bd92::t_4da4ef6e265534 10
+JustMarkets/App/SceneDelegate.swift
+  s_de8da96018bd92::t_68089a99494de4 25
+  s_de8da96018bd92::t_2900819805e144 24
+JustMarkets/Features/Markets/Domain/Repositories/MarketsRepository.swift
+  s_de8da96018bd92::t_4da4ef6e265534 8
+JustMarkets/Features/Detail/Presentation/View/SymbolDetailInfoRow.swift
+  s_de8da96018bd92::t_6befe77bc8a136 8
+JustMarkets/Features/Markets/Domain/Repositories/FavoritesRepository.swift
+  s_de8da96018bd92::t_4da4ef6e265534 8
+JustMarkets/Features/Markets/Data/Repositories/RemoteMarketsRepository.swift
+  s_de8da96018bd92::t_4f0ed8c5ac873b 19,35,45,51,54,56-62,66,70-71,74-75,78-80
+  s_de8da96018bd92::t_2d111dedf14996 76-77
+  s_de8da96018bd92::t_5214a091a36a40 10
+  s_de8da96018bd92::t_1dcd7f5cd967e2 17,52-53,81,86-88,94
+JustMarkets/Features/Markets/Data/Services/TickThrottle.swift
+  s_de8da96018bd92::t_5214a091a36a40 9
+  s_de8da96018bd92::t_2d74756e80f7d9 20
+JustMarkets/App/Coordinator/AppCoordinator.swift
+  s_de8da96018bd92::t_5214a091a36a40 10
+JustMarkets/Features/Detail/Presentation/SymbolDetailViewModel.swift
+  s_de8da96018bd92::t_6befe77bc8a136 10
+JustMarkets/Features/Markets/Domain/Models/MarketType.swift
+  s_de8da96018bd92::t_4da4ef6e265534 8
+JustMarketsTests/Helpers/XCTestCase+MemoryLeak.swift
+  s_ee95b00c6f3872::t_123bb53afecefe 1-26
+JustMarkets/Features/Markets/Data/Mappers/MarketsMapper.swift
+  s_de8da96018bd92::t_6befe77bc8a136 10
+JustMarketsTests/Helpers/TestHelpers.swift
+  s_de8da96018bd92::t_8576e9f8298013 12-15
+JustMarkets/Features/Markets/Data/Services/MarketsQuotesDataSource.swift
+  s_de8da96018bd92::t_5214a091a36a40 8
+JustMarketsTests/MemoryLeakTests.swift
+  s_ee95b00c6f3872::t_123bb53afecefe 1-14,16-53
+  s_ee95b00c6f3872::t_306af4a42faf49 15
+JustMarkets/Features/Markets/Domain/Models/MarketsUpdate.swift
+  s_de8da96018bd92::t_4da4ef6e265534 8
+JustMarkets/Core/DesignSystem/Theme.swift
+  s_de8da96018bd92::t_68089a99494de4 28
+JustMarkets/Core/UI/StatusNavigationController.swift
+  s_de8da96018bd92::t_b55a66f600527a 30,39,57-72,82-84,87-92
+  s_de8da96018bd92::t_6befe77bc8a136 12
+JustMarkets/App/Assembly/AppContainer.swift
+  s_de8da96018bd92::t_5214a091a36a40 8
+  s_de8da96018bd92::t_0e1a004b11f984 11,13-17,19,21,25-37
+JustMarkets/Features/Markets/Domain/Models/MarketConnectionState.swift
+  s_de8da96018bd92::t_4da4ef6e265534 8
+JustMarkets/Features/Detail/Data/RemoteSymbolDetailsRepository.swift
+  s_de8da96018bd92::t_5214a091a36a40 8
+JustMarkets/Features/Markets/Presentation/MarketsProcessor.swift
+  s_de8da96018bd92::t_6befe77bc8a136 10
+JustMarkets/Features/Markets/Presentation/View/MarketRow.swift
+  s_de8da96018bd92::t_6befe77bc8a136 8,10
+JustMarketsTests/Data/CoreDataFavoritesRepositoryTests.swift
+  s_de8da96018bd92::t_5f7e53281c7436 11
+  s_de8da96018bd92::t_3efb33e842f153 14
+JustMarkets/Features/Markets/Presentation/MarketsViewModel.swift
+  s_de8da96018bd92::t_6befe77bc8a136 10
+JustMarkets/Features/Markets/Domain/Models/MarketQuote.swift
+  s_de8da96018bd92::t_4da4ef6e265534 10
+JustMarkets/Features/Detail/Data/DTO/OhlcResponseDTO.swift
+  s_de8da96018bd92::t_f3f5a7d865da6e 10,12
+JustMarkets/Features/Markets/Domain/Filters/MarketsFilter.swift
+  s_de8da96018bd92::t_6befe77bc8a136 10
+JustMarkets/Features/Markets/Domain/Models/MarketSymbol.swift
+  s_de8da96018bd92::t_4da4ef6e265534 8
+JustMarkets/Features/Markets/Data/Repositories/CoreDataFavoritesRepository.swift
+  s_de8da96018bd92::t_5214a091a36a40 10
+JustMarkets/Features/Markets/Presentation/MarketsViewController.swift
+  s_de8da96018bd92::t_6befe77bc8a136 20
+  s_de8da96018bd92::t_ab70b9b9a3d62b 134-142,198
+  s_de8da96018bd92::t_57a98a7cf8f211 199
+JustMarkets/Core/Network/NetworkClient.swift
+  s_de8da96018bd92::t_3b0839ee3e4373 11,13,30
+JustMarkets/Features/Detail/Domain/CandleInterval.swift
+  s_de8da96018bd92::t_b2a1e0b17735cc 8
+JustMarkets/Features/Detail/Domain/MarketCandle.swift
+  s_de8da96018bd92::t_487e3f9bf4ba0d 10
+JustMarkets/Features/Markets/Data/DTO/MarketSymbolDTO.swift
+  s_de8da96018bd92::t_cf3984ff917a67 8
+JustMarkets/Features/Markets/Data/DTO/MarketTickDTO.swift
+  s_de8da96018bd92::t_2a16a8c22bcfc2 10
+JustMarkets/Features/Markets/Domain/Models/MarketCategory.swift
+  s_de8da96018bd92::t_6610b7f169435a 8
+JustMarketsTests/Data/TickThrottleTests.swift
+  s_de8da96018bd92::t_7daaede51398b6 60
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.6.10",
+  "base_commit_sha": "cc43b5306d381cb9776c7f532763daba506120ff",
+  "prompts": {},
+  "sessions": {
+    "s_de8da96018bd92": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "d8f33ac0-4519-4bfc-ac9a-18d223ccab77",
+        "model": "claude-opus-5"
+      },
+      "human_author": "Mykhailo Zhutov <zhutov.misha@gmail.com>"
+    },
+    "s_ee95b00c6f3872": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "a0b29121-265e-456c-95c8-918867607432",
+        "model": "claude-opus-5"
+      },
+      "human_author": "Mykhailo Zhutov <zhutov.misha@gmail.com>"
+    }
+  }
+}
