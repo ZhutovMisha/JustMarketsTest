@@ -1,0 +1,80 @@
+name: CI
+
+on:
+  push:
+    branches:
+      - main
+  # No branch filter: review PRs target branches other than main
+  # (e.g. baseline), and those need CI too.
+  pull_request:
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  test:
+    name: Build and test
+    runs-on: macos-latest
+    timeout-minutes: 40
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Select newest Xcode
+        run: |
+          sudo xcode-select -s "$(ls -d /Applications/Xcode*.app | sort -V | tail -1)"
+          xcodebuild -version
+
+      - name: Cache Swift packages
+        uses: actions/cache@v4
+        with:
+          path: .spm-cache
+          key: ${{ runner.os }}-spm-${{ hashFiles('**/Package.resolved') }}
+          restore-keys: ${{ runner.os }}-spm-
+
+      # The runner image decides which simulators exist, so pick one that is
+      # actually installed rather than pinning a device name that may not be.
+      - name: Choose a simulator
+        id: sim
+        run: |
+          UDID=$(xcrun simctl list devices available --json | python3 -c "
+          import json, sys
+          runtimes = json.load(sys.stdin)['devices']
+          best = None
+          for runtime, devices in runtimes.items():
+              if 'iOS' not in runtime:
+                  continue
+              version = runtime.rsplit('.', 1)[-1].replace('iOS-', '').replace('-', '.')
+              for device in devices:
+                  if 'iPhone' in device['name']:
+                      key = tuple(int(p) for p in version.split('.') if p.isdigit())
+                      if best is None or key > best[0]:
+                          best = (key, device['udid'], device['name'], version)
+          if best is None:
+              sys.exit('No iPhone simulator available on this runner')
+          print(best[1])
+          sys.stderr.write('Using %s (iOS %s)\n' % (best[2], best[3]))
+          ")
+          echo "udid=$UDID" >> "$GITHUB_OUTPUT"
+
+      - name: Build and test
+        run: |
+          set -o pipefail
+          xcodebuild test \
+            -project JustMarkets.xcodeproj \
+            -scheme JustMarkets \
+            -destination "id=${{ steps.sim.outputs.udid }}" \
+            -clonedSourcePackagesDirPath .spm-cache \
+            -resultBundlePath TestResults.xcresult \
+            -skipMacroValidation \
+            CODE_SIGNING_ALLOWED=NO
+
+      - name: Upload results
+        if: ${{ !cancelled() }}
+        uses: actions/upload-artifact@v4
+        with:
+          name: TestResults
+          path: TestResults.xcresult
+          if-no-files-found: ignore
