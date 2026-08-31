@@ -1,0 +1,132 @@
+JustMarkets/Features/Markets/Data/API/MarketsEndpoint.swift
+  s_4917fd541a3836::t_38c9bf3670c09b 1-25
+JustMarkets/Features/Markets/Domain/Repositories/FavoritesRepository.swift
+  s_4917fd541a3836::t_95fad40162b891 1-9,11-12
+  s_4917fd541a3836::t_9a49610c9fd037 10
+JustMarkets/Features/Markets/Data/Services/MarketsWebSocket.swift
+  s_4917fd541a3836::t_0f57d6b4fcdb87 1-37,49-58,60-65,67-71,73-112,117-119
+  s_4917fd541a3836::t_e485db9ea4a61b 48,59,115-116
+  s_fd3d677a12ce06::t_3864de8b5fa80b 41-47,66,72,113-114
+  s_fd3d677a12ce06::t_730aefedf04a76 38-40
+JustMarkets/Features/Markets/Presentation/MarketsViewController.swift
+  s_fd3d677a12ce06::t_b00aaa2e8fcb44 98-106,111,115-117,161
+  s_4917fd541a3836::t_a7068cb8d8ebc8 21,38,133
+  s_4917fd541a3836::t_ffa9217b2cc00a 45,79,91-95,190
+  s_fd3d677a12ce06::t_c89cfc654990ab 17,22
+  s_4917fd541a3836::t_070e226e456eb6 108,159
+  s_4917fd541a3836::t_0424be421446bf 172-177,184-185
+  s_4917fd541a3836::t_0c1721bae5f8a0 71
+  s_4917fd541a3836::t_22fe10a384baea 12-13,18-19,23-24
+  s_fd3d677a12ce06::t_a4477f321f4c1e 10,15,20,29-37,39-44,46-47,50,60-64,68,70,72-74,76,78,80-82,88-90,107,121-130,132,137-138,140-158,160,162-163,166,168,170-171,186,188-189,192
+JustMarkets/Features/Markets/Data/Repositories/RemoteMarketsRepository.swift
+  s_fd3d677a12ce06::t_07417db525c9b9 12-20,25,60,91,93,104-105,115-116
+  s_fd3d677a12ce06::t_53b74c5ee1ab70 45
+  s_fd3d677a12ce06::t_1f76ea71495d85 30-31
+  s_4917fd541a3836::t_1f0814a08a94c4 1-11,21-24,26-29,32-44,46-59,61-90,92,94-103,106-114,117-119
+JustMarkets/Features/Markets/Data/Repositories/CoreDataFavoritesRepository.swift
+  s_4917fd541a3836::t_9a49610c9fd037 45
+  s_4917fd541a3836::t_95fad40162b891 34
+  s_4917fd541a3836::t_070e226e456eb6 33
+  s_4917fd541a3836::t_0e7f7ce33283b6 18-29,40
+  s_4917fd541a3836::t_a15b4f40e5b8ac 1-17,30-32,35-39,41-44,46-47
+JustMarkets/Features/Markets/Presentation/View/MarketRow.swift
+  s_4917fd541a3836::t_7bdb7fbeaf66f1 1-24
+JustMarkets/Features/Markets/Domain/Models/MarketSymbol.swift
+  s_4917fd541a3836::t_a0fa0ea39362c1 1-16
+JustMarkets/Features/Markets/Presentation/View/MarketsMainView.swift
+  s_4917fd541a3836::t_0c1721bae5f8a0 143,147-150
+  s_4917fd541a3836::t_3e9271e8141695 1-133,135-141,144-146,151-156
+  s_4917fd541a3836::t_bff0144bde9eff 134,142
+JustMarkets/Features/Markets/Domain/Models/MarketStatus.swift
+  s_4917fd541a3836::t_7bdb7fbeaf66f1 1-24,30-38
+  s_4917fd541a3836::t_84e82987fd14b1 25-29
+JustMarkets/Features/Markets/Presentation/MarketsViewModel.swift
+  s_4917fd541a3836::t_7f8461c7d60a6d 77-86
+  s_4917fd541a3836::t_c3b84b5d99eb11 58,63,67,71,88-89,124,149,165,172,181,188,193,196-197,202,207,209-210,215,222-223
+  s_4917fd541a3836::t_a8c873979a1849 47-51,54-57,92-94,102-105,199
+  s_4917fd541a3836::t_dbbd2e891012ff 41
+  s_4917fd541a3836::t_b44aae8e8f5ebe 95-101,106-108,121-122,146,152-153,157-164,169-171,221,230
+  s_fd3d677a12ce06::t_e6ca47696738b3 20,43,109-110,192,194,200-201,203-206,208,211-214
+  s_4917fd541a3836::t_4a44dd34dc21fa 117-119,145,154-156,166-167
+  s_4917fd541a3836::t_5ac43454fc0c33 112-116,123,182
+  s_4917fd541a3836::t_c5473abeeb38f4 12-17,25-29
+  s_fd3d677a12ce06::t_42c5de220814cb 21-22
+  s_4917fd541a3836::t_68b4966a5737b0 24
+  s_4917fd541a3836::t_5d556a2e8610d4 30-32,38-40
+  s_4917fd541a3836::t_e64f743a50aea5 60-62
+  s_4917fd541a3836::t_83c50a5c372628 65-66
+  s_4917fd541a3836::t_9737a5ea328284 69-70
+  s_4917fd541a3836::t_898fa03588fce4 75-76
+  s_4917fd541a3836::t_59c3b5f6dd3570 87
+  s_4917fd541a3836::t_62beb384c30246 90-91
+  s_4917fd541a3836::t_db5a5e8f38e09d 120
+  s_4917fd541a3836::t_44670d03f5c5d9 125-126
+  s_4917fd541a3836::t_9cdc8eca1e4cc6 142-144
+  s_4917fd541a3836::t_eb2ad2370d8a3e 147-148
+  s_4917fd541a3836::t_3ce8de6639f4b1 151
+  s_4917fd541a3836::t_94a16d1cf517bc 168
+  s_4917fd541a3836::t_13f76ab5b2121b 173
+  s_4917fd541a3836::t_5e76455df21e1a 178-180
+  s_4917fd541a3836::t_8b233bbb12788b 183-187
+  s_4917fd541a3836::t_df2f075926f1d8 198
+  s_4917fd541a3836::t_c7c5e0d46d5918 216-220
+  s_4917fd541a3836::t_ded8a6457c2338 224-229
+  s_4917fd541a3836::t_76ccc1467d1284 231-233
+JustMarkets/Features/Markets/Presentation/Cell/MarketCollectionViewCell.swift
+  s_4917fd541a3836::t_7f8461c7d60a6d 211
+  s_4917fd541a3836::t_7b4de35c2466cc 2,10-15,19,21,27-28,35-36,43-44,53-54,62-65,67-85,89-95,98,104-105,108-109,114-116,126-131,137,140-143,148-153,155-156,159-163,165-169,173,175,181-196,198-210,212-249
+JustMarkets/Features/Markets/Presentation/MarketsProcessor.swift
+  s_4917fd541a3836::t_93d93dc783eb15 1-100
+JustMarkets/Features/Markets/Domain/Filters/MarketsFilter.swift
+  s_4917fd541a3836::t_dbbd2e891012ff 1-72
+JustMarkets/Features/Markets/Data/DTO/MarketSymbolDTO.swift
+  s_a7ab280115cefc::t_f089f63a60c23b 12
+JustMarkets/Features/Markets/Data/DTO/MarketTickDTO.swift
+  s_a7ab280115cefc::t_55c1af51ea880f 1-17
+JustMarkets/Features/Markets/Data/Mappers/MarketsMapper.swift
+  s_fd3d677a12ce06::t_56445c2a257dce 1-37
+JustMarkets/Features/Markets/Data/Services/MarketsQuotesDataSource.swift
+  s_fd3d677a12ce06::t_82bcc22c5b5c82 1-18
+JustMarkets/Features/Markets/Domain/Models/MarketCategory.swift
+  s_fd3d677a12ce06::t_cf1330d9223fe0 1-18
+JustMarkets/Features/Markets/Domain/Models/MarketConnectionState.swift
+  s_fd3d677a12ce06::t_d4a8cadca7442c 1-13
+JustMarkets/Features/Markets/Domain/Models/MarketQuote.swift
+  s_a7ab280115cefc::t_e350a08d75677d 1-22
+JustMarkets/Features/Markets/Domain/Models/MarketType.swift
+  s_a7ab280115cefc::t_b910d174f907b6 5,8
+JustMarkets/Features/Markets/Domain/Repositories/MarketsRepository.swift
+  s_a7ab280115cefc::t_96e293758339ba 1-12
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.6.10",
+  "base_commit_sha": "7365ebc924d0da7897494fb65b9bbb1608bd8d56",
+  "prompts": {},
+  "sessions": {
+    "s_4917fd541a3836": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "8fa9c59c-b1f0-4a97-bea2-fc5ca3d26a99",
+        "model": "claude-opus-5"
+      },
+      "human_author": "Mykhailo Zhutov <zhutov.misha@gmail.com>"
+    },
+    "s_a7ab280115cefc": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "a525711c-5333-462e-b05d-ce621a0b02a4",
+        "model": "claude-opus-5"
+      },
+      "human_author": "Mykhailo Zhutov <zhutov.misha@gmail.com>"
+    },
+    "s_fd3d677a12ce06": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "18ab4141-a823-4e2d-a0ba-8da101d9b9c6",
+        "model": "claude-opus-5"
+      },
+      "human_author": "Mykhailo Zhutov <zhutov.misha@gmail.com>"
+    }
+  }
+}
