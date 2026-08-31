@@ -14,9 +14,8 @@ reviews:
   auto_review:
     enabled: true
     drafts: false
-    # Review PRs are stacked onto non-default bases; without this CodeRabbit
-    # skips them with "auto reviews are disabled on base/target branches
-    # other than the default branch".
+
+    # Review PRs that use non-default base branches.
     base_branches:
       - "baseline"
       - "feat/.*"
@@ -31,9 +30,16 @@ reviews:
     - "!**/*.xcassets/**"
     - "!JustMarkets/Resources/*.json"
 
+    # Ignore project tooling and configuration.
+    - "!CLAUDE.md"
+    - "!.coderabbit.yaml"
+    - "!**/.github/**"
+
   path_instructions:
     - path: "JustMarkets/**/*.swift"
       instructions: >
+        Review only the JustMarkets iOS application code.
+
         Swift 5 language mode, iOS 17+, UIKit only — no SwiftUI. Layout is
         programmatic via SnapKit; flag any storyboard or xib UI.
 
@@ -104,3 +110,27 @@ reviews:
 
 chat:
   auto_reply: true
+
+  instructions: >
+    Review only the JustMarkets iOS application and its tests.
+
+    Do not review, analyze, or make recommendations about external tools,
+    AI assistants, Claude, CodeRabbit, AMD, GitHub Actions, CI/CD, IDE
+    configuration, or the development environment.
+
+    Do not review or suggest changes to CLAUDE.md, .coderabbit.yaml, GitHub
+    Actions workflows, or other project tooling.
+
+    Focus exclusively on the actual JustMarkets application code and tests:
+    architecture, Swift, UIKit, Swift concurrency, networking, market data
+    flow, AsyncStream, memory management, collection view performance,
+    dependency injection, ViewModels, Repositories, UI behaviour, testing,
+    and correctness against the project requirements.
+
+    Prefer simple, pragmatic solutions appropriate for this project.
+    Do not suggest abstractions, layers, protocols, or patterns merely for
+    theoretical purity.
+
+    Be critical and specific. Flag real bugs, lifecycle problems, race
+    conditions, unnecessary complexity, performance issues, and violations
+    of the project's established architecture.
