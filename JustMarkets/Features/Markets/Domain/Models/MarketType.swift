@@ -2,11 +2,10 @@
 //  MarketType.swift
 //  JustMarkets
 //
-//  Created by Zhutov Mykhailo on 29.08.2026.
+//  Created by Zhutov Mykhailo on 30.08.2026.
 //
 
-
-nonisolated enum MarketType: String, Decodable, Sendable, CaseIterable {
+nonisolated enum MarketType: String, Sendable {
     
     case forex = "Forex"
     case stock = "Stock"
@@ -14,5 +13,4 @@ nonisolated enum MarketType: String, Decodable, Sendable, CaseIterable {
     case commodity = "Commodity"
     case index = "Index"
     case future = "Future"
-    
 }

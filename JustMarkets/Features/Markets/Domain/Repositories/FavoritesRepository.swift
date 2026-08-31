@@ -1,0 +1,12 @@
+//
+//  FavoritesRepository.swift
+//  JustMarkets
+//
+//  Created by Zhutov Mykhailo on 30.08.2026.
+//
+
+protocol FavoritesRepository: Sendable {
+    
+    func favorites() throws -> [String]
+    func toggle(_ symbol: String) async throws -> [String]
+}

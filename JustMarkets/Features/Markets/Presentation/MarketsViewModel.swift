@@ -7,114 +7,232 @@
 
 import Foundation
 
-@MainActor
 final class MarketsViewModel {
-
-    enum Category: String, CaseIterable {
-        
-        case all = "All"
-        case favorites = "Favorites"
-        case forex = "Forex"
-        case crypto = "Crypto"
-        case stocks = "Stocks"
-        case indices = "Indices"
-        case commodities = "Commodities"
-        case futures = "Futures"
-    }
-
-    private let networkClient: NetworkClient
-
-    var onChange: (() -> Void)?
-    var onLoadingChanged: ((Bool) -> Void)?
-
-    private(set) var allMarkets: [MarketCell.Config] = []
-    private(set) var markets: [MarketCell.Config] = []
-    private(set) var selectedCategory: Category = .forex
     
-    private let pageSize = 20
-    private var currentPage = 0
-
-    private var symbols: [MarketSymbolDTO] = []
-
-    init(networkClient: NetworkClient) {
-        self.networkClient = networkClient
+    typealias OnChange = () -> Void
+    typealias OnLoadingChanged = (Bool) -> Void
+    typealias OnRowsUpdated = () -> Void
+    typealias OnConnectionChanged = (MarketConnectionState) -> Void
+    typealias OnError = (Error) -> Void
+    
+    struct Dependencies {
+        
+        let marketsRepository: MarketsRepository
+        let favoritesRepository: FavoritesRepository
+        let processor: MarketsProcessor
     }
-
-    func loadMarkets() async throws {
-        onLoadingChanged?(true)
-
-        defer {
-            onLoadingChanged?(false)
+    
+    var onChange: OnChange?
+    var onLoadingChanged: OnLoadingChanged?
+    var onRowsUpdated: OnRowsUpdated?
+    var onConnectionChanged: OnConnectionChanged?
+    var onError: OnError?
+    
+    let categories = MarketCategory.allCases
+    
+    private(set) var selectedCategory: MarketCategory = .crypto
+    private(set) var visibleSymbols: [MarketSymbol] = []
+    
+    private let dependencies: Dependencies
+    private let searchDebounce: Duration
+    
+    private var symbols: [MarketSymbol] = []
+    private var quotes: [String: MarketQuote] = [:]
+    private var favorites: [String] = []
+    private var query = ""
+    private var subscribedNames: [String] = []
+    
+    private var searchTask: Task<Void, Never>?
+    private var updatesTask: Task<Void, Never>?
+    private var loadTask: Task<Void, Never>?
+    
+    init(dependencies: Dependencies, searchDebounce: Duration = .milliseconds(300)) {
+        self.dependencies = dependencies
+        self.searchDebounce = searchDebounce
+    }
+    
+    deinit {
+        searchTask?.cancel()
+        updatesTask?.cancel()
+        loadTask?.cancel()
+    }
+    
+    var emptyMessage: String? {
+        guard !symbols.isEmpty, visibleSymbols.isEmpty else {
+            return nil
         }
-
-        symbols = try await networkClient.request(
-            MarketsEndpoint.symbols,
-            responseType: [MarketSymbolDTO].self
+        
+        if !query.trimmingCharacters(in: .whitespaces).isEmpty {
+            return "Nothing found"
+        }
+        
+        if selectedCategory == .favorites {
+            return "No favorites yet\nTap the star on a market to add it"
+        }
+        
+        return "No markets in this category"
+    }
+    
+    func row(for symbol: MarketSymbol) -> MarketRow {
+        let quote = quotes[symbol.name]
+        
+        return dependencies.processor.makeRow(
+            symbol: symbol,
+            quote: quote,
+            status: MarketStatus(
+                symbol: symbol,
+                quote: quote,
+                now: .now
+            ),
+            isFavorite: favorites.contains(symbol.name)
         )
-
-        updateMarkets()
-        onChange?()
     }
     
-    
-     func loadMorePages() {
-        let nextPage = currentPage + 1
-        let startIndex = nextPage * pageSize
+    func loadData() {
+        loadTask?.cancel()
         
-        guard startIndex < allMarkets.count else { return }
-        
-        let endIndex = min(startIndex + pageSize, allMarkets.count)
-        markets.append(contentsOf: allMarkets[startIndex..<endIndex])
-        
-        currentPage = nextPage
-        onChange?()
+        loadTask = Task { [weak self] in
+            guard let self else {
+                return
+            }
+            
+            onLoadingChanged?(true)
+            
+            defer {
+                // A newer load already owns the indicator.
+                if !Task.isCancelled {
+                    onLoadingChanged?(false)
+                }
+            }
+            
+            do {
+                symbols = try await dependencies.marketsRepository.fetchSymbols()
+                favorites = try dependencies.favoritesRepository.favorites()
+                
+                refreshVisibleSymbols()
+                onChange?()
+                
+                resubscribeIfNeeded()
+            } catch {
+                guard !Task.isCancelled else {
+                    return
+                }
+                
+                onError?(error)
+            }
+        }
     }
-
-    func selectCategory(_ category: Category) {
+    
+    func selectCategory(_ category: MarketCategory) {
         guard category != selectedCategory else {
             return
         }
-
+        
         selectedCategory = category
-        updateMarkets()
+        
+        refreshVisibleSymbols()
+        onChange?()
+        resubscribeIfNeeded()
+    }
+    
+    func search(_ query: String) {
+        searchTask?.cancel()
+        
+        searchTask = Task { [weak self, searchDebounce] in
+            try? await Task.sleep(for: searchDebounce)
+            
+            guard !Task.isCancelled else {
+                return
+            }
+            
+            self?.applySearch(query)
+        }
+    }
+    
+    func toggleFavorite(for symbol: String) {
+        Task { [weak self] in
+            guard let self else {
+                return
+            }
+            
+            do {
+                favorites = try await dependencies.favoritesRepository.toggle(symbol)
+                
+                refreshVisibleSymbols()
+                onChange?()
+                resubscribeIfNeeded()
+            } catch {
+                guard !Task.isCancelled else {
+                    return
+                }
+                
+                onError?(error)
+            }
+        }
+    }
+}
+
+// MARK: - Private
+
+private extension MarketsViewModel {
+    
+    func applySearch(_ query: String) {
+        guard query != self.query else {
+            return
+        }
+        
+        self.query = query
+        
+        refreshVisibleSymbols()
         onChange?()
     }
-
-    private func updateMarkets() {
-        allMarkets = symbols
-            .filter { matchesCategory($0) }
-            .map {
-                MarketCell.Config(
-                    symbol: $0.name,
-                    name: $0.description,
-                    price: $0.tickValue,
-                    changePercent: $0.contractSize
-                )
-            }
-        
-        currentPage = 0
-        markets = Array(allMarkets.prefix(pageSize))
+    
+    func refreshVisibleSymbols() {
+        visibleSymbols = MarketsFilter.symbols(
+            symbols,
+            category: selectedCategory,
+            favorites: favorites,
+            query: query
+        )
     }
-
-
-    private func matchesCategory( _ symbol: MarketSymbolDTO) -> Bool {
-        switch selectedCategory {
-        case .all:
-             false
-        case .favorites:
-             false
-        case .forex:
-            symbol.type == .forex
-        case .crypto:
-            symbol.type == .crypto
-        case .stocks:
-            symbol.type == .stock
-        case .indices:
-            symbol.type == .index
-        case .commodities:
-            symbol.type == .commodity
-        case .futures:
-            symbol.type == .future
+  
+    func resubscribeIfNeeded() {
+        let names = MarketsFilter.symbols(
+            symbols,
+            category: selectedCategory,
+            favorites: favorites,
+            query: ""
+        )
+        .map(\.name)
+        
+        guard names != subscribedNames else {
+            return
+        }
+        
+        subscribedNames = names
+        
+        let stream = dependencies.marketsRepository.updates(for: names)
+        
+        updatesTask?.cancel()
+        
+        updatesTask = Task { [weak self] in
+            for await update in stream {
+                self?.apply(update)
+            }
+        }
+    }
+    
+    func apply(_ update: MarketsUpdate) {
+        switch update {
+        case .quotes(let quotes):
+            for quote in quotes {
+                self.quotes[quote.symbol] = quote
+            }
+            
+            onRowsUpdated?()
+            
+        case .connection(let state):
+            onConnectionChanged?(state)
         }
     }
 }

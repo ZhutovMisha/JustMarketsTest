@@ -7,77 +7,141 @@
 
 import UIKit
 
-private nonisolated enum MarketsSection: Hashable {
+final class MarketsViewController: BaseViewController<MarketsMainView> {
     
-    case markets
-}
-
-private nonisolated enum Item: Hashable {
-    case market(MarketCell.Config)
-}
-
-final class MarketsViewController: UIViewController {
-    
+    typealias OnSymbolSelected = (MarketSymbol) -> Void
+    typealias OnConnectionStateChanged = (MarketConnectionState) -> Void
     private typealias DataSource =
-    UICollectionViewDiffableDataSource<MarketsSection, Item>
+        UICollectionViewDiffableDataSource<Section, MarketSymbol>
     
- 
-    private let mainView = MarketsMainView()
+   
+    var onSymbolSelected: OnSymbolSelected?
+    var onConnectionStateChanged: OnConnectionStateChanged?
     
-    private lazy var dataSource: DataSource = createDataSource()
+    private nonisolated enum Section {
+        
+        case markets
+    }
+    
     private let viewModel: MarketsViewModel
     private var pendingSlideDirection: CGFloat?
     
+    private lazy var dataSource: DataSource = {
+        DataSource(collectionView: mainView.collectionView) {
+            [weak self] collectionView, indexPath, symbol in
+            
+            let cell: MarketCollectionViewCell =
+                collectionView.dequeueReusableCell(for: indexPath)
+            
+            guard let self else { return cell }
+            
+            cell.configure(with: viewModel.row(for: symbol), showsSeparator: indexPath.item > 0)
+            
+            cell.onFavoriteTapped = { [weak self] in
+                self?.viewModel.toggleFavorite(for: symbol.name)
+            }
+            
+            return cell
+        }
+    }()
+    
     init(viewModel: MarketsViewModel) {
         self.viewModel = viewModel
-        
-        super.init(nibName: nil, bundle: nil)
+        super.init()
     }
     
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
     
-    override func loadView() {
-        view = mainView
-    }
-    
     override func viewDidLoad() {
         super.viewDidLoad()
+        
+        title = "Markets"
+        
+        mainView.collectionView.delegate = self
+        mainView.searchBar.delegate = self
         
         bindViewModel()
         configureSegmentControl()
         
-        Task {
-            do {
-                try await viewModel.loadMarkets()
-            } catch {
-                print("❌ Failed to load markets:", error)
-            }
+        viewModel.loadData()
+    }
+}
+
+// MARK: - Private
+
+private extension MarketsViewController {
+    
+    func bindViewModel() {
+        viewModel.onChange = { [weak self] in
+            self?.applySnapshot()
         }
         
-        applySnapshot(animated: false)
-
-    }
-    
-    private func bindViewModel() {
-        viewModel.onChange = { [weak self] in
-            self?.applySnapshot(animated: true)
+        viewModel.onRowsUpdated = { [weak self] in
+            self?.updateVisibleCells()
         }
         
         viewModel.onLoadingChanged = { [weak self] isLoading in
             self?.mainView.setAnimating(isLoading)
         }
+        
+        viewModel.onConnectionChanged = { [weak self] state in
+            self?.onConnectionStateChanged?(state)
+        }
+        
+        viewModel.onError = { [weak self] error in
+            self?.showAlert(message: error.localizedDescription)
+        }
     }
     
-    private func configureSegmentControl() {
-        let categories = MarketsViewModel.Category.allCases
-
-        let selectedIndex = categories.firstIndex(of: viewModel.selectedCategory) ?? 0
-
+    func applySnapshot() {
+        mainView.setEmptyMessage(viewModel.emptyMessage)
+        
+        var snapshot = NSDiffableDataSourceSnapshot<Section, MarketSymbol>()
+        snapshot.appendSections([.markets])
+        snapshot.appendItems(viewModel.visibleSymbols)
+        
+        let slideDirection = pendingSlideDirection
+        pendingSlideDirection = nil
+        
+        dataSource.apply(snapshot, animatingDifferences: slideDirection == nil) { [weak self] in
+            guard
+                let self,
+                let slideDirection
+            else {
+                return
+            }
+            
+            mainView.scrollToTop()
+            mainView.slideInCollection(direction: slideDirection)
+        }
+    }
+    
+    func updateVisibleCells() {
+        let collectionView = mainView.collectionView
+        
+        for indexPath in collectionView.indexPathsForVisibleItems {
+            guard
+                let symbol = dataSource.itemIdentifier(for: indexPath),
+                let cell = collectionView.cellForItem(at: indexPath)
+                    as? MarketCollectionViewCell
+            else {
+                continue
+            }
+            
+            cell.configure(with: viewModel.row(for: symbol), showsSeparator: indexPath.item > 0)
+        }
+    }
+    
+    func configureSegmentControl() {
+        let categories = viewModel.categories
+        
         mainView.segmentControl.configure(
             titles: categories.map(\.rawValue),
-            selectedIndex: selectedIndex
+            selectedIndex: categories.firstIndex(
+                of: viewModel.selectedCategory
+            ) ?? 0
         ) { [weak self] index in
             guard
                 let self,
@@ -85,81 +149,46 @@ final class MarketsViewController: UIViewController {
             else {
                 return
             }
-
-            self.selectCategory(categories[index])
-        }
-    }
-    
-    private func selectCategory(_ category: MarketsViewModel.Category) {
-        guard category != viewModel.selectedCategory else { return }
-
-        let categories = MarketsViewModel.Category.allCases
-
-        guard
-            let currentIndex = categories.firstIndex(of: viewModel.selectedCategory),
-            let selectedIndex = categories.firstIndex(of: category)
-        else {
-            return
-        }
-
-        pendingSlideDirection = selectedIndex > currentIndex ? 1 : -1
-
-        viewModel.selectCategory(category)
-    }
-    
-    private func createDataSource() -> DataSource {
-        DataSource(collectionView: mainView.collectionView) { collectionView, indexPath, item in
-            switch item {
-            case .market(let config):
-                let cell: MarketCell = collectionView.dequeueReusableCell(for: indexPath)
-                cell.configure(with: config, showsSeparator: indexPath.item > 0)
-                return cell
+            
+            let category = categories[index]
+            
+            guard category != viewModel.selectedCategory else {
+                return
             }
+            
+            let currentIndex = categories.firstIndex(of: viewModel.selectedCategory) ?? 0
+            
+            pendingSlideDirection = index > currentIndex ? 1 : -1
+            
+            viewModel.selectCategory(category)
         }
     }
+}
+
+// MARK: - UISearchBarDelegate
+
+extension MarketsViewController: UISearchBarDelegate {
     
-    private func applySnapshot(animated: Bool) {
-        var snapshot = NSDiffableDataSourceSnapshot<MarketsSection, Item>()
-        
-        snapshot.appendSections([.markets])
-        snapshot.appendItems(viewModel.markets.map(Item.market), toSection: .markets)
-        
-        guard let direction = pendingSlideDirection else {
-            dataSource.apply(snapshot, animatingDifferences: animated)
-            return
-        }
-        
-        pendingSlideDirection = nil
-        
-        dataSource.apply(snapshot, animatingDifferences: false) { [weak self] in
-            self?.slideIn(direction: direction)
-        }
+    func searchBar(_ searchBar: UISearchBar, textDidChange searchText: String) {
+        viewModel.search(searchText)
     }
     
-    private func slideIn(direction: CGFloat) {
-        let collectionView = mainView.collectionView
-        let distance = collectionView.bounds.width * direction
-
-        collectionView.transform = CGAffineTransform(translationX: distance,y: 0)
-
-        UIView.animate(withDuration: 0.35,delay: 0,options: [.curveEaseInOut]) {
-            collectionView.transform = .identity
-        }
+    func searchBarSearchButtonClicked(_ searchBar: UISearchBar) {
+        searchBar.resignFirstResponder()
     }
 }
 
 // MARK: - UICollectionViewDelegate
 
 extension MarketsViewController: UICollectionViewDelegate {
-  
-    func scrollViewDidScroll(_ scrollView: UIScrollView) {
-        let offsetY = scrollView.contentOffset.y
-        let contentHeight = scrollView.contentSize.height
-        let visibleHeight = scrollView.bounds.height
+    
+    func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
+        collectionView.deselectItem(at: indexPath, animated: true)
         
-        let threshold: CGFloat = 300
+        guard let symbol = dataSource.itemIdentifier(for: indexPath) else {
+            return
+        }
         
-        guard offsetY + visibleHeight > contentHeight - threshold else { return }
-        viewModel.loadMorePages()
+        onSymbolSelected?(symbol)
     }
 }
