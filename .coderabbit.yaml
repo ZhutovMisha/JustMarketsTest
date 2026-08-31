@@ -49,8 +49,11 @@ reviews:
         A protocol is only justified by a real seam — a test double or a second
         implementation. Flag protocols with a single conformance and no double.
 
-        There is no use-case layer: ViewModels take repository protocols and
-        compose them. Flag any new UseCase/Interactor type.
+        There is no use-case layer by default: ViewModels take repository
+        protocols and compose them. A use case is permitted only when two or
+        more ViewModels need the same composed operation (ADR-0011) — flag a
+        new UseCase/Interactor that has a single caller, not one that is
+        extracted for a genuine second caller.
 
     - path: "JustMarkets/**/Presentation/*ViewModel.swift"
       instructions: >
