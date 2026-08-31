@@ -17,10 +17,7 @@ private final class SegmentScrollView: UIScrollView {
 
 private final class SegmentButton: UIButton {
 
-    func configure(
-        title: String,
-        font: UIFont
-    ) {
+    func configure(title: String, font: UIFont) {
         setTitle(title, for: .normal)
         titleLabel?.font = font
 
@@ -29,14 +26,13 @@ private final class SegmentButton: UIButton {
     }
 
     func updateColor(isSelected: Bool) {
-        setTitleColor(
-            isSelected ? .white : .systemGray,
-            for: .normal
-        )
+        setTitleColor(isSelected ? Theme.Colors.primaryText : Theme.Colors.secondaryText, for: .normal)
     }
 }
 
 final class SegmentControl: BaseView {
+    
+    typealias OnSelect = (Int) -> Void
 
     private let scrollView: SegmentScrollView = {
         let view = SegmentScrollView()
@@ -48,26 +44,26 @@ final class SegmentControl: BaseView {
     private let stackView: UIStackView = {
         let view = UIStackView()
         view.axis = .horizontal
-        view.spacing = 16
+        view.spacing = Theme.Spacing.extraLarge
         view.alignment = .center
         return view
     }()
 
     private let indicatorView: UIView = {
         let view = UIView()
-        view.backgroundColor = .label
+        view.backgroundColor = Theme.Colors.selectionIndicator
         return view
     }()
 
     private let separatorView: UIView = {
         let view = UIView()
-        view.backgroundColor = .separator
+        view.backgroundColor = Theme.Colors.separator
         return view
     }()
 
     private var titles: [String] = []
     private var buttons: [SegmentButton] = []
-    private var onSelect: ((Int) -> Void)?
+    private var onSelect: OnSelect?
 
     private let feedbackGenerator = UISelectionFeedbackGenerator()
 
@@ -81,7 +77,7 @@ final class SegmentControl: BaseView {
     func configure(
         titles: [String],
         selectedIndex: Int,
-        onSelect: @escaping (Int) -> Void
+        onSelect: @escaping OnSelect
     ) {
         self.titles = titles
         self.onSelect = onSelect
@@ -106,7 +102,7 @@ final class SegmentControl: BaseView {
         updateIndicator(animated: false)
     }
 
-    func select( _ index: Int, animated: Bool = true) {
+    private func handleTap(at index: Int) {
         guard
             titles.indices.contains(index),
             index != selectedIndex
@@ -120,11 +116,8 @@ final class SegmentControl: BaseView {
         feedbackGenerator.prepare()
 
         updateColors()
-        updateIndicator(animated: animated)
-
-        if animated {
-            scrollToSelected()
-        }
+        updateIndicator(animated: true)
+        scrollToSelected()
 
         onSelect?(index)
     }
@@ -137,7 +130,8 @@ final class SegmentControl: BaseView {
         scrollView.addSubview(indicatorView)
 
         separatorView.snp.makeConstraints { make in
-            make.horizontalEdges.bottom.equalToSuperview()
+            make.directionalHorizontalEdges.equalToSuperview().inset(Theme.Spacing.extraLarge)
+            make.bottom.equalToSuperview()
             make.height.equalTo(1)
         }
 
@@ -148,45 +142,25 @@ final class SegmentControl: BaseView {
         }
 
         stackView.snp.makeConstraints { make in
-            make.top.equalTo(scrollView.contentLayoutGuide).offset(8)
-            make.horizontalEdges.equalTo(
-                scrollView.contentLayoutGuide
-            ).inset(16)
-            make.bottom.equalTo(
-                scrollView.contentLayoutGuide
-            ).offset(-6)
+            make.top.equalTo(scrollView.contentLayoutGuide).offset(Theme.Spacing.medium)
+            make.horizontalEdges.equalTo(scrollView.contentLayoutGuide).inset(Theme.Spacing.extraLarge)
+            make.bottom.equalTo(scrollView.contentLayoutGuide).offset(-Theme.Spacing.small)
         }
     }
 
-    private func makeButton(
-        title: String,
-        index: Int
-    ) -> SegmentButton {
+    private func makeButton(title: String, index: Int) -> SegmentButton {
         let button = SegmentButton()
 
-        button.configure(
-            title: title,
-            font: .systemFont(
-                ofSize: 17,
-                weight: .semibold
-            )
-        )
+        button.configure(title: title, font: Theme.Fonts.segmentTitle)
 
-        button.addAction(
-            UIAction { [weak self] _ in
-                self?.select(index)
-            },
-            for: .touchUpInside
-        )
+        button.onTap { [weak self] in self?.handleTap(at: index) }
 
         return button
     }
 
     private func updateColors() {
         for (index, button) in buttons.enumerated() {
-            button.updateColor(
-                isSelected: index == selectedIndex
-            )
+            button.updateColor(isSelected: index == selectedIndex)
         }
     }
 
@@ -236,9 +210,6 @@ final class SegmentControl: BaseView {
             .convert(button.bounds, to: scrollView)
             .insetBy(dx: -200, dy: 0)
 
-        scrollView.scrollRectToVisible(
-            frame,
-            animated: true
-        )
+        scrollView.scrollRectToVisible(frame, animated: true)
     }
 }

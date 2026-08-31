@@ -8,16 +8,9 @@
 import Alamofire
 import Foundation
 
-protocol NetworkClient {
+protocol NetworkClient: Sendable {
     
     func request<T: Decodable & Sendable>(_ endpoint: Endpoint, responseType: T.Type) async throws -> T
-}
-
-extension NetworkClient {
-    
-    func request<T: Decodable>(_ endpoint: Endpoint) async throws -> T {
-        try await request(endpoint, responseType: T.self)
-    }
 }
 
 final class AFNetworkClient: NetworkClient {
@@ -25,29 +18,17 @@ final class AFNetworkClient: NetworkClient {
     private let configuration: NetworkConfiguration
     private let session: Session
     
-    init(
-        configuration: NetworkConfiguration,
-        interceptor: RequestInterceptor? = nil
-    ) {
+    init(configuration: NetworkConfiguration = .production) {
         self.configuration = configuration
         
         let sessionConfiguration = URLSessionConfiguration.af.default
         sessionConfiguration.timeoutIntervalForRequest = configuration.timeoutInterval
         
-        session = Session(configuration: sessionConfiguration, interceptor: interceptor)
+        session = Session(configuration: sessionConfiguration)
     }
     
-    func request<T: Decodable & Sendable>(
-        _ endpoint: Endpoint,
-        responseType: T.Type
-    ) async throws -> T {
-        return try await makeRequest(for: endpoint)
-            .serializingDecodable(T.self, decoder: configuration.decoder)
-            .value
-    }
-    
-    private func makeRequest(for endpoint: Endpoint) -> DataRequest {
-        session
+    func request<T: Decodable & Sendable>(_ endpoint: Endpoint, responseType: T.Type) async throws -> T {
+        try await session
             .request(
                 configuration.baseURL.appendingPathComponent(endpoint.path),
                 method: endpoint.method,
@@ -56,5 +37,7 @@ final class AFNetworkClient: NetworkClient {
                 headers: endpoint.headers
             )
             .validate()
+            .serializingDecodable(T.self, decoder: configuration.decoder)
+            .value
     }
 }

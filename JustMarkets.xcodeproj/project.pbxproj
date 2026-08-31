@@ -8,8 +8,9 @@
 
 /* Begin PBXBuildFile section */
 		6BDD09403042A2E8001C466C /* SnapKit in Frameworks */ = {isa = PBXBuildFile; productRef = 6BDD093F3042A2E8001C466C /* SnapKit */; };
-		6BDD09433042A31C001C466C /* Kingfisher in Frameworks */ = {isa = PBXBuildFile; productRef = 6BDD09423042A31C001C466C /* Kingfisher */; };
 		6BDD099F3042B3F9001C466C /* Alamofire in Frameworks */ = {isa = PBXBuildFile; productRef = 6BDD099E3042B3F9001C466C /* Alamofire */; };
+		6BDD0A4130433B26001C466C /* SignalRClient in Frameworks */ = {isa = PBXBuildFile; productRef = 6BDD0A4030433B26001C466C /* SignalRClient */; };
+		6BDD0D3E3044AD3E001C466C /* DGCharts in Frameworks */ = {isa = PBXBuildFile; productRef = 6BDD0D3D3044AD3E001C466C /* DGCharts */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -58,8 +59,9 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				6BDD0D3E3044AD3E001C466C /* DGCharts in Frameworks */,
+				6BDD0A4130433B26001C466C /* SignalRClient in Frameworks */,
 				6BDD099F3042B3F9001C466C /* Alamofire in Frameworks */,
-				6BDD09433042A31C001C466C /* Kingfisher in Frameworks */,
 				6BDD09403042A2E8001C466C /* SnapKit in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -113,8 +115,9 @@
 			name = JustMarkets;
 			packageProductDependencies = (
 				6BDD093F3042A2E8001C466C /* SnapKit */,
-				6BDD09423042A31C001C466C /* Kingfisher */,
 				6BDD099E3042B3F9001C466C /* Alamofire */,
+				6BDD0A4030433B26001C466C /* SignalRClient */,
+				6BDD0D3D3044AD3E001C466C /* DGCharts */,
 			);
 			productName = JustMarkets;
 			productReference = 6BDD08E8304294EA001C466C /* JustMarkets.app */;
@@ -173,8 +176,9 @@
 			minimizedProjectReferenceProxies = 1;
 			packageReferences = (
 				6BDD093E3042A2E8001C466C /* XCRemoteSwiftPackageReference "SnapKit" */,
-				6BDD09413042A31C001C466C /* XCRemoteSwiftPackageReference "Kingfisher" */,
 				6BDD099D3042B3F9001C466C /* XCRemoteSwiftPackageReference "Alamofire" */,
+				6BDD0A3F30433B26001C466C /* XCRemoteSwiftPackageReference "SignalR-Client-Swift" */,
+				6BDD0D3C3044AD3E001C466C /* XCRemoteSwiftPackageReference "Charts" */,
 			);
 			preferredProjectObjectVersion = 77;
 			productRefGroup = 6BDD08E9304294EA001C466C /* Products */;
@@ -261,7 +265,7 @@
 				SWIFT_DEFAULT_ACTOR_ISOLATION = MainActor;
 				SWIFT_EMIT_LOC_STRINGS = YES;
 				SWIFT_UPCOMING_FEATURE_MEMBER_IMPORT_VISIBILITY = YES;
-				SWIFT_VERSION = 5.0;
+				SWIFT_VERSION = 6.0;
 				TARGETED_DEVICE_FAMILY = 1;
 			};
 			name = Debug;
@@ -297,7 +301,7 @@
 				SWIFT_DEFAULT_ACTOR_ISOLATION = MainActor;
 				SWIFT_EMIT_LOC_STRINGS = YES;
 				SWIFT_UPCOMING_FEATURE_MEMBER_IMPORT_VISIBILITY = YES;
-				SWIFT_VERSION = 5.0;
+				SWIFT_VERSION = 6.0;
 				TARGETED_DEVICE_FAMILY = 1;
 			};
 			name = Release;
@@ -442,7 +446,7 @@
 				SWIFT_APPROACHABLE_CONCURRENCY = YES;
 				SWIFT_EMIT_LOC_STRINGS = NO;
 				SWIFT_UPCOMING_FEATURE_MEMBER_IMPORT_VISIBILITY = YES;
-				SWIFT_VERSION = 5.0;
+				SWIFT_VERSION = 6.0;
 				TARGETED_DEVICE_FAMILY = 1;
 				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/JustMarkets.app/$(BUNDLE_EXECUTABLE_FOLDER_PATH)/JustMarkets";
 			};
@@ -467,7 +471,7 @@
 				SWIFT_APPROACHABLE_CONCURRENCY = YES;
 				SWIFT_EMIT_LOC_STRINGS = NO;
 				SWIFT_UPCOMING_FEATURE_MEMBER_IMPORT_VISIBILITY = YES;
-				SWIFT_VERSION = 5.0;
+				SWIFT_VERSION = 6.0;
 				TARGETED_DEVICE_FAMILY = 1;
 				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/JustMarkets.app/$(BUNDLE_EXECUTABLE_FOLDER_PATH)/JustMarkets";
 			};
@@ -514,20 +518,28 @@
 				minimumVersion = 6.0.0;
 			};
 		};
-		6BDD09413042A31C001C466C /* XCRemoteSwiftPackageReference "Kingfisher" */ = {
-			isa = XCRemoteSwiftPackageReference;
-			repositoryURL = "https://github.com/onevcat/Kingfisher?";
-			requirement = {
-				kind = upToNextMajorVersion;
-				minimumVersion = 8.12.0;
-			};
-		};
 		6BDD099D3042B3F9001C466C /* XCRemoteSwiftPackageReference "Alamofire" */ = {
 			isa = XCRemoteSwiftPackageReference;
 			repositoryURL = "https://github.com/Alamofire/Alamofire";
 			requirement = {
 				kind = upToNextMajorVersion;
 				minimumVersion = 5.12.0;
+			};
+		};
+		6BDD0A3F30433B26001C466C /* XCRemoteSwiftPackageReference "SignalR-Client-Swift" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/moozzyk/SignalR-Client-Swift";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 1.2.1;
+			};
+		};
+		6BDD0D3C3044AD3E001C466C /* XCRemoteSwiftPackageReference "Charts" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/ChartsOrg/Charts";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 5.1.0;
 			};
 		};
 /* End XCRemoteSwiftPackageReference section */
@@ -538,15 +550,20 @@
 			package = 6BDD093E3042A2E8001C466C /* XCRemoteSwiftPackageReference "SnapKit" */;
 			productName = SnapKit;
 		};
-		6BDD09423042A31C001C466C /* Kingfisher */ = {
-			isa = XCSwiftPackageProductDependency;
-			package = 6BDD09413042A31C001C466C /* XCRemoteSwiftPackageReference "Kingfisher" */;
-			productName = Kingfisher;
-		};
 		6BDD099E3042B3F9001C466C /* Alamofire */ = {
 			isa = XCSwiftPackageProductDependency;
 			package = 6BDD099D3042B3F9001C466C /* XCRemoteSwiftPackageReference "Alamofire" */;
 			productName = Alamofire;
+		};
+		6BDD0A4030433B26001C466C /* SignalRClient */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 6BDD0A3F30433B26001C466C /* XCRemoteSwiftPackageReference "SignalR-Client-Swift" */;
+			productName = SignalRClient;
+		};
+		6BDD0D3D3044AD3E001C466C /* DGCharts */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 6BDD0D3C3044AD3E001C466C /* XCRemoteSwiftPackageReference "Charts" */;
+			productName = DGCharts;
 		};
 /* End XCSwiftPackageProductDependency section */
 	};

@@ -8,6 +8,11 @@
 import Foundation
 
 struct NetworkConfiguration {
+    
+    private enum Constants {
+        
+        static let baseURL = URL(string: "https://biquote.io/api")!
+    }
 
     let baseURL: URL
     let timeoutInterval: TimeInterval
@@ -31,6 +36,6 @@ struct NetworkConfiguration {
     }
 
     static var production: NetworkConfiguration {
-        NetworkConfiguration(baseURL: URL(string: "https://biquote.io/api")!)
+        NetworkConfiguration(baseURL: Constants.baseURL)
     }
 }

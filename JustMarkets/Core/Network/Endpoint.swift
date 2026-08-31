@@ -16,6 +16,8 @@ protocol Endpoint {
     var encoding: ParameterEncoding { get }
 }
 
+// MARK: - Defaults
+
 extension Endpoint {
 
     var method: HTTPMethod { .get }

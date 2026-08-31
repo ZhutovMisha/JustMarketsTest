@@ -7,24 +7,24 @@
 
 import UIKit
 
-class SceneDelegate: UIResponder, UIWindowSceneDelegate {
-
+final class SceneDelegate: UIResponder, UIWindowSceneDelegate {
+    
     var window: UIWindow?
-
-
+    
+    private let coordinator = AppCoordinator(container: AppContainer())
+    
     func scene(
         _ scene: UIScene,
         willConnectTo session: UISceneSession,
         options connectionOptions: UIScene.ConnectionOptions
     ) {
         guard let windowScene = scene as? UIWindowScene else { return }
-
-        let container = AppContainer()
+        
         let window = UIWindow(windowScene: windowScene)
-        window.rootViewController = container.makeRootViewController()
-
-        self.window = window
+        window.rootViewController = coordinator.start()
         window.makeKeyAndVisible()
+        
+        self.window = window
     }
 
     func sceneDidDisconnect(_ scene: UIScene) {
@@ -55,9 +55,6 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
         // to restore the scene back to its current state.
 
         // Save changes in the application's managed object context when the application transitions to the background.
-        (UIApplication.shared.delegate as? AppDelegate)?.saveContext()
     }
-
-
 }
 
