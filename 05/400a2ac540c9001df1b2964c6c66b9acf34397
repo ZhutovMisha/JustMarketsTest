@@ -1,0 +1,22 @@
+README.md
+  s_ee95b00c6f3872::t_7970965d441ef0 1-2,6-10,12,77-78,81,83-89,91-92,94,96,98,100-101,104-106,108-110,112-115,119-121,124,126-129
+  s_ee95b00c6f3872::t_649ca44b95e94c 3-5,11,13-76,79-80,82,90,93,95,97,99,102-103,107,111,116-118,122-123,125,130-135
+  s_ee95b00c6f3872::t_70b514a41472e7 136-138
+  s_ee95b00c6f3872::t_a85d23f9b0ce13 139-140
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.6.10",
+  "base_commit_sha": "05400a2ac540c9001df1b2964c6c66b9acf34397",
+  "prompts": {},
+  "sessions": {
+    "s_ee95b00c6f3872": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "a0b29121-265e-456c-95c8-918867607432",
+        "model": "claude-opus-5"
+      },
+      "human_author": "Mykhailo Zhutov <zhutov.misha@gmail.com>"
+    }
+  }
+}
