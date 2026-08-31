@@ -1,0 +1,19 @@
+JustMarkets.xcodeproj/xcshareddata/xcschemes/JustMarkets.xcscheme
+  s_ee95b00c6f3872::t_31d028be615141 1-88
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.6.10",
+  "base_commit_sha": "1182d4fa3024666cb1e75930efaba0dc8bb533c9",
+  "prompts": {},
+  "sessions": {
+    "s_ee95b00c6f3872": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "a0b29121-265e-456c-95c8-918867607432",
+        "model": "claude-opus-5"
+      },
+      "human_author": "Mykhailo Zhutov <zhutov.misha@gmail.com>"
+    }
+  }
+}
