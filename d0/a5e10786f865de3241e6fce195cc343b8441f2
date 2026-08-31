@@ -1,0 +1,19 @@
+.coderabbit.yaml
+  s_ee95b00c6f3872::t_92d1a0194268ce 17-24
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.6.10",
+  "base_commit_sha": "d0a5e10786f865de3241e6fce195cc343b8441f2",
+  "prompts": {},
+  "sessions": {
+    "s_ee95b00c6f3872": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "a0b29121-265e-456c-95c8-918867607432",
+        "model": "claude-opus-5"
+      },
+      "human_author": "Mykhailo Zhutov <zhutov.misha@gmail.com>"
+    }
+  }
+}
