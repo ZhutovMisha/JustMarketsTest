@@ -1,0 +1,34 @@
+docs/CodeStyle.md
+  s_ee95b00c6f3872::t_9e8007f1c56782 154,160-161
+CLAUDE.md
+  s_ee95b00c6f3872::t_9e8007f1c56782 9-16
+docs/DesignPatterns.md
+  s_ee95b00c6f3872::t_9e8007f1c56782 58
+docs/adr/README.md
+  s_ee95b00c6f3872::t_9e8007f1c56782 14
+  s_ee95b00c6f3872::t_6e911ed2b436f5 24
+docs/adr/0012-explicit-mainactor.md
+  s_ee95b00c6f3872::t_6e911ed2b436f5 1-53
+docs/adr/0002-mainactor-default-isolation.md
+  s_ee95b00c6f3872::t_9e8007f1c56782 3
+docs/Testing.md
+  s_ee95b00c6f3872::t_9e8007f1c56782 3-6
+docs/Architecture.md
+  s_ee95b00c6f3872::t_9e8007f1c56782 37-38,80-84,89
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.6.10",
+  "base_commit_sha": "a90683f22f6b58a98d0bd7a5478f79e3c31eefe1",
+  "prompts": {},
+  "sessions": {
+    "s_ee95b00c6f3872": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "a0b29121-265e-456c-95c8-918867607432",
+        "model": "claude-opus-5"
+      },
+      "human_author": "Mykhailo Zhutov <zhutov.misha@gmail.com>"
+    }
+  }
+}
