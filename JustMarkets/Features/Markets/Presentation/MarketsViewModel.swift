@@ -206,16 +206,12 @@ private extension MarketsViewModel {
         )
         .map(\.name)
         
-        guard names != subscribedNames else {
-            return
-        }
+        guard names != subscribedNames else { return }
         
         subscribedNames = names
-        
         let stream = dependencies.marketsRepository.updates(for: names)
         
         updatesTask?.cancel()
-        
         updatesTask = Task { [weak self] in
             for await update in stream {
                 self?.apply(update)

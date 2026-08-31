@@ -13,7 +13,7 @@ final class MarketCollectionViewCell: BaseCollectionViewCell {
     
     private static let favoriteImage = UIImage(systemName: "star.fill")
     private static let notFavoriteImage = UIImage(systemName: "star")
-
+    
     private let symbolLabel: UILabel = {
         let label = UILabel()
         label.font = Theme.Fonts.rowTitle
@@ -21,7 +21,7 @@ final class MarketCollectionViewCell: BaseCollectionViewCell {
         label.textColor = Theme.Colors.primaryText
         return label
     }()
-
+    
     private let nameLabel: UILabel = {
         let label = UILabel()
         label.font = Theme.Fonts.rowSubtitle
@@ -29,7 +29,7 @@ final class MarketCollectionViewCell: BaseCollectionViewCell {
         label.lineBreakMode = .byTruncatingTail
         return label
     }()
-
+    
     private let priceLabel: UILabel = {
         let label = UILabel()
         label.font = Theme.Fonts.price
@@ -37,7 +37,7 @@ final class MarketCollectionViewCell: BaseCollectionViewCell {
         label.textAlignment = .right
         return label
     }()
-
+    
     private let changeLabel: UILabel = {
         let label = UILabel()
         label.font = Theme.Fonts.change
@@ -45,7 +45,7 @@ final class MarketCollectionViewCell: BaseCollectionViewCell {
         label.textAlignment = .right
         return label
     }()
-
+    
     private let titlesStackView: UIStackView = {
         let stack = UIStackView()
         stack.axis = .vertical
@@ -54,7 +54,7 @@ final class MarketCollectionViewCell: BaseCollectionViewCell {
         stack.setContentCompressionResistancePriority(.defaultLow, for: .horizontal)
         return stack
     }()
-
+    
     private let quoteStackView: UIStackView = {
         let stack = UIStackView()
         stack.axis = .vertical
@@ -63,7 +63,7 @@ final class MarketCollectionViewCell: BaseCollectionViewCell {
         stack.setContentCompressionResistancePriority(.required, for: .horizontal)
         return stack
     }()
-
+    
     private let statusLabel: UILabel = {
         let label = UILabel()
         label.font = Theme.Fonts.badge
@@ -85,11 +85,13 @@ final class MarketCollectionViewCell: BaseCollectionViewCell {
         stack.spacing = Theme.Spacing.small
         return stack
     }()
-
+    
     private let favoriteButton: UIButton = {
-        let button = UIButton(type: .system)
+        let button = UIButton()
         
-        button.tintColor = Theme.Colors.favorite
+        button.setImage(UIImage(systemName: "star")?.withRenderingMode(.alwaysOriginal).withTintColor(Theme.Colors.favorite), for: .normal)
+        button.setImage(UIImage(systemName: "star.fill")?.withRenderingMode(.alwaysOriginal).withTintColor(Theme.Colors.favorite), for: .selected)
+        
         return button
     }()
     
@@ -98,42 +100,35 @@ final class MarketCollectionViewCell: BaseCollectionViewCell {
         view.backgroundColor = Theme.Colors.separator
         return view
     }()
-
+    
     // MARK: - Setup
     
     var onFavoriteTapped: OnFavoriteTapped?
     
     override func prepareForReuse() {
         super.prepareForReuse()
-        
-        onFavoriteTapped = nil
-        symbolLabel.text = nil
-        nameLabel.text = nil
-        priceLabel.text = nil
-        changeLabel.text = nil
-        priceLabel.textColor = Theme.Colors.primaryText
-        changeLabel.textColor = Theme.Colors.secondaryText
-        statusBadge.isHidden = true
-        separator.isHidden = false
-    }
 
+        onFavoriteTapped = nil
+        priceLabel.layer.removeAllAnimations()
+    }
+    
     override func initialize() {
         setupHierarchy()
         setupConstraints()
     }
-
+    
     private func setupHierarchy() {
         statusBadge.addSubview(statusLabel)
         
         symbolStackView.addArrangedSubview(symbolLabel)
         symbolStackView.addArrangedSubview(statusBadge)
-
+        
         titlesStackView.addArrangedSubview(symbolStackView)
         titlesStackView.addArrangedSubview(nameLabel)
-
+        
         quoteStackView.addArrangedSubview(priceLabel)
         quoteStackView.addArrangedSubview(changeLabel)
-
+        
         contentView.addSubview(favoriteButton)
         contentView.addSubview(titlesStackView)
         contentView.addSubview(quoteStackView)
@@ -143,7 +138,7 @@ final class MarketCollectionViewCell: BaseCollectionViewCell {
         }
         contentView.addSubview(separator)
     }
-
+    
     private func setupConstraints() {
         favoriteButton.snp.makeConstraints { make in
             make.centerY.equalToSuperview()
@@ -155,7 +150,7 @@ final class MarketCollectionViewCell: BaseCollectionViewCell {
             make.verticalEdges.equalToSuperview().inset(Theme.Spacing.medium)
             make.leading.equalTo(favoriteButton.snp.trailing).offset(Theme.Spacing.large)
         }
-
+        
         statusLabel.snp.makeConstraints { make in
             make.verticalEdges.equalToSuperview().inset(Theme.Spacing.tiny)
             make.horizontalEdges.equalToSuperview().inset(Theme.Spacing.small)
@@ -168,44 +163,28 @@ final class MarketCollectionViewCell: BaseCollectionViewCell {
             make.leading.greaterThanOrEqualTo(titlesStackView.snp.trailing)
                 .offset(Theme.Spacing.large)
         }
-
+        
         separator.snp.makeConstraints { make in
             make.leading.trailing.equalToSuperview().inset(Theme.Spacing.extraLarge)
             make.top.equalToSuperview()
             make.height.equalTo(0.5)
         }
     }
-
+    
     // MARK: - Configuration
-
+    
     func configure(with row: MarketRow, showsSeparator: Bool) {
         symbolLabel.text = row.symbol
         nameLabel.text = row.name
         changeLabel.text = row.change
         changeLabel.textColor = color(for: row.trend)
         configureStatus(row.status)
-        
-        UIView.performWithoutAnimation {
-            favoriteButton.setImage(
-                row.isFavorite ? Self.favoriteImage : Self.notFavoriteImage,
-                for: .normal
-            )
-            
-            favoriteButton.layoutIfNeeded()
-        }
-        
+        favoriteButton.isSelected = row.isFavorite
         separator.isHidden = !showsSeparator
         
-        let didPriceChange = priceLabel.text != nil
-            && priceLabel.text != row.price
+        guard priceLabel.text != row.price else { return }
         
-        priceLabel.text = row.price
-        
-        guard didPriceChange else {
-            return
-        }
-        
-        flash(color: color(for: row.trend))
+        updatePrice(row.price)
     }
     
     private func configureStatus(_ status: MarketStatus) {
@@ -237,15 +216,12 @@ final class MarketCollectionViewCell: BaseCollectionViewCell {
         }
     }
     
-    private func flash(color: UIColor) {
-        priceLabel.textColor = color
+    private func updatePrice(_ text: String) {
+        let transition = CATransition()
+        transition.type = .fade
+        transition.duration = 0.2
         
-        UIView.transition(
-            with: priceLabel,
-            duration: 0.6,
-            options: [.transitionCrossDissolve, .beginFromCurrentState]
-        ) {
-            self.priceLabel.textColor = Theme.Colors.primaryText
-        }
+        priceLabel.layer.add(transition, forKey: "priceUpdate")
+        priceLabel.text = text
     }
 }
