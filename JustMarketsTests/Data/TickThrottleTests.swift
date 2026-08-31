@@ -57,6 +57,7 @@ private extension TickThrottleTests {
         
         sut.start()
         
+        
         return sut
     }
 }

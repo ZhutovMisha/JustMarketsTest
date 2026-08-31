@@ -25,6 +25,7 @@ enum Theme {
         static let badgeStale = UIColor.systemOrange
         static let badgeText = UIColor.white
         static let errorBackground = UIColor.systemRed
+        static let fieldBackground = UIColor(white: 0.14, alpha: 1)
     }
     
     enum Fonts {

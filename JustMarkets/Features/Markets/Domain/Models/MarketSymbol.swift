@@ -5,7 +5,7 @@
 //  Created by Zhutov Mykhailo on 29.08.2026.
 //
 
-nonisolated struct MarketSymbol: Sendable, Hashable {
+struct MarketSymbol: Hashable {
     
     let name: String
     let title: String

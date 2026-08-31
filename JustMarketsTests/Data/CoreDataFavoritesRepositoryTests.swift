@@ -8,10 +8,10 @@
 import Testing
 @testable import JustMarkets
 
+@MainActor
 @Suite
 struct CoreDataFavoritesRepositoryTests {
-    
-    
+
     @Test
     func toggle_twice_addsThenRemovesSymbol() async throws {
         let sut = try makeSUT()
@@ -22,7 +22,6 @@ struct CoreDataFavoritesRepositoryTests {
         #expect(afterAdding == ["EURUSD"])
         #expect(afterRemoving.isEmpty)
     }
-    
 }
 
 // MARK: - Helpers

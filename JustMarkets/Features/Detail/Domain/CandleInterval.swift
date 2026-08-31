@@ -5,7 +5,7 @@
 //  Created by Zhutov Mykhailo on 30.08.2026.
 //
 
-nonisolated enum CandleInterval: String, Sendable, CaseIterable {
+enum CandleInterval: String, CaseIterable {
     
     case oneMinute = "1m"
     case fiveMinutes = "5m"

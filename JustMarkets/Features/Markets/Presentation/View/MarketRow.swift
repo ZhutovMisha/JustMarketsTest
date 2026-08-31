@@ -5,9 +5,9 @@
 //  Created by Zhutov Mykhailo on 30.08.2026.
 //
 
-nonisolated struct MarketRow {
+struct MarketRow {
     
-    nonisolated enum Trend {
+    enum Trend {
         
         case up
         case down

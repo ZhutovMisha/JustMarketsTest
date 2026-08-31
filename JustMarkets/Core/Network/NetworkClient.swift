@@ -8,9 +8,9 @@
 import Alamofire
 import Foundation
 
-protocol NetworkClient: Sendable {
+protocol NetworkClient {
     
-    func request<T: Decodable & Sendable>(_ endpoint: Endpoint, responseType: T.Type) async throws -> T
+    func request<T: Decodable>(_ endpoint: Endpoint, responseType: T.Type) async throws -> T
 }
 
 final class AFNetworkClient: NetworkClient {
@@ -27,7 +27,7 @@ final class AFNetworkClient: NetworkClient {
         session = Session(configuration: sessionConfiguration)
     }
     
-    func request<T: Decodable & Sendable>(_ endpoint: Endpoint, responseType: T.Type) async throws -> T {
+    func request<T: Decodable>(_ endpoint: Endpoint, responseType: T.Type) async throws -> T {
         try await session
             .request(
                 configuration.baseURL.appendingPathComponent(endpoint.path),

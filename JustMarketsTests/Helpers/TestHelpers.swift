@@ -9,6 +9,10 @@ import Foundation
 import Testing
 @testable import JustMarkets
 
+func anyNSError() -> NSError {
+    NSError(domain: "any", code: 0)
+}
+
 func makeSymbol(
     _ name: String = "EURUSD",
     type: MarketType = .forex,
@@ -72,7 +76,6 @@ func makeTick(
     MarketTickDTO(symbol: symbol, bid: bid, ask: ask, mid: mid, dayDiffPercent: change)
 }
 
-/// Kicks off a load and waits for the view model to report it finished.
 @MainActor
 func loadAndWait(_ sut: MarketsViewModel, sourceLocation: SourceLocation = #_sourceLocation) async {
     var isFinished = false

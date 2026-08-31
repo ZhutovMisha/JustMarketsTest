@@ -9,7 +9,7 @@ import UIKit
 
 final class StatusNavigationController: UINavigationController {
     
-    nonisolated enum Status: Equatable {
+    enum Status: Equatable {
         
         case normal
         case warning
@@ -17,7 +17,6 @@ final class StatusNavigationController: UINavigationController {
     }
     
     private static let successDuration: TimeInterval = 2
-    private static let transitionDuration: TimeInterval = 0.25
     private var status: Status = .normal
     private var resetTask: Task<Void, Never>?
     
@@ -28,8 +27,7 @@ final class StatusNavigationController: UINavigationController {
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        delegate = self
-        updateAppearance()
+        applyStatus()
     }
     
     func setStatus(_ newStatus: Status) {
@@ -38,7 +36,7 @@ final class StatusNavigationController: UINavigationController {
         resetTask?.cancel()
         status = newStatus
         
-        updateAppearance()
+        applyStatus()
         
         guard newStatus == .success else { return }
         
@@ -56,6 +54,22 @@ final class StatusNavigationController: UINavigationController {
 
 private extension StatusNavigationController {
     
+    /// A push or pop already owns the navigation bar: repainting it mid-flight
+    /// is what makes the bar flicker, so the status waits for the transition.
+    func applyStatus() {
+        guard let coordinator = transitionCoordinator else {
+            updateAppearance()
+            updateRootTitle()
+            
+            return
+        }
+        
+        coordinator.animate(alongsideTransition: nil) { [weak self] _ in
+            self?.updateAppearance()
+            self?.updateRootTitle()
+        }
+    }
+    
     func updateAppearance() {
         let appearance = UINavigationBarAppearance()
         appearance.configureWithOpaqueBackground()
@@ -65,21 +79,17 @@ private extension StatusNavigationController {
         ]
         
         navigationBar.tintColor = Theme.Colors.primaryText
-        
-        UIView.transition(
-            with: navigationBar,
-            duration: Self.transitionDuration,
-            options: [.transitionCrossDissolve, .beginFromCurrentState]
-        ) {
-            self.navigationBar.standardAppearance = appearance
-            self.navigationBar.scrollEdgeAppearance = appearance
-            self.updateTitle()
-        }
+        navigationBar.standardAppearance = appearance
+        navigationBar.scrollEdgeAppearance = appearance
+        navigationBar.compactAppearance = appearance
     }
     
-    func updateTitle() {
-        navigationBar.topItem?.title =
-            statusTitle ?? topViewController?.title
+    /// The status replaces the root title only. A pushed screen keeps its own
+    /// title — the bar colour is what reports the connection there.
+    func updateRootTitle() {
+        guard let root = viewControllers.first else { return }
+        
+        root.navigationItem.title = statusTitle ?? root.title
     }
     
     var statusTitle: String? {
@@ -106,18 +116,5 @@ private extension StatusNavigationController {
         case .success:
             Theme.Colors.positive
         }
-    }
-}
-
-// MARK: - UINavigationControllerDelegate
-
-extension StatusNavigationController: UINavigationControllerDelegate {
-    
-    func navigationController(
-        _ navigationController: UINavigationController,
-        didShow viewController: UIViewController,
-        animated: Bool
-    ) {
-        updateTitle()
     }
 }

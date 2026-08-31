@@ -7,7 +7,7 @@
 
 import Foundation
 
-nonisolated enum MarketsFilter {
+enum MarketsFilter {
 
     static func symbols(
         _ symbols: [MarketSymbol],

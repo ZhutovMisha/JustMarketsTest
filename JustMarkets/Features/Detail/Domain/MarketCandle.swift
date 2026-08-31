@@ -7,7 +7,7 @@
 
 import Foundation
 
-nonisolated struct MarketCandle: Sendable, Equatable {
+struct MarketCandle: Equatable {
     
     let openTime: Date
     let open: Decimal

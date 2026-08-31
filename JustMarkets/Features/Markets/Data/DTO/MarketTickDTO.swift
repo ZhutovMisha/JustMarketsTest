@@ -7,7 +7,7 @@
 
 import Foundation
 
-nonisolated struct MarketTickDTO: Decodable, Sendable {
+struct MarketTickDTO: Decodable {
     
     let symbol: String
     let bid: Decimal

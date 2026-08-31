@@ -29,7 +29,7 @@ final class NetworkClientSpy {
 
 extension NetworkClientSpy: NetworkClient {
     
-    func request<T: Decodable & Sendable>(_ endpoint: Endpoint, responseType: T.Type) async throws -> T {
+    func request<T: Decodable>(_ endpoint: Endpoint, responseType: T.Type) async throws -> T {
         messages.append(.request(path: endpoint.path))
         
         return try NetworkConfiguration.makeDefaultDecoder().decode(T.self, from: try result.get())

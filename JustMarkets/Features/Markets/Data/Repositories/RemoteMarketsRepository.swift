@@ -7,23 +7,16 @@
 
 import Foundation
 
+@MainActor
 final class RemoteMarketsRepository: MarketsRepository {
-    
-    /// One live consumer of the feed: where to send updates, and which symbols it
-    /// put into the socket subscription. The two are always added and dropped
-    /// together, so they are one value.
-    private struct Consumer {
-        
-        let continuation: AsyncStream<MarketsUpdate>.Continuation
-        let symbols: Set<String>
-    }
     
     private let networkClient: NetworkClient
     private let quotesDataSource: MarketsQuotesDataSource
     private let throttle: TickThrottle
     
-    private var consumers: [UUID: Consumer] = [:]
+    private var continuation: AsyncStream<MarketsUpdate>.Continuation?
     private var latestQuotes: [String: MarketQuote] = [:]
+    private var subscriptionID = 0
     
     init(
         networkClient: NetworkClient,
@@ -39,7 +32,7 @@ final class RemoteMarketsRepository: MarketsRepository {
         }
         
         quotesDataSource.onConnectionChanged = { [weak self] state in
-            self?.broadcast(.connection(state))
+            self?.continuation?.yield(.connection(state))
         }
         
         throttle.onTicks = { [weak self] ticks in
@@ -49,71 +42,55 @@ final class RemoteMarketsRepository: MarketsRepository {
     
     func fetchSymbols() async throws -> [MarketSymbol] {
         try await networkClient
-            .request(MarketsEndpoint.symbols, responseType: [MarketSymbolDTO].self)
+            .request(MarketsEndpoint.symbols,responseType: [MarketSymbolDTO].self)
             .compactMap(MarketsMapper.map)
     }
     
     func updates(for symbols: [String]) -> AsyncStream<MarketsUpdate> {
         AsyncStream { continuation in
-            let id = UUID()
+            subscriptionID += 1
+            self.continuation = continuation
             
-            consumers[id] = Consumer(continuation: continuation, symbols: Set(symbols))
+            let id = subscriptionID
+            
+            let quotes = symbols.compactMap {
+                latestQuotes[$0]
+            }
+            
+            if !quotes.isEmpty {
+                continuation.yield(.quotes(quotes))
+            }
             
             continuation.onTermination = { [weak self] _ in
                 Task { @MainActor in
-                    self?.removeConsumer(id)
+                    self?.stopFeed(id)
                 }
             }
             
-            resubscribe()
-            
-            let snapshot = symbols.compactMap { latestQuotes[$0] }
-            
-            guard !snapshot.isEmpty else { return }
-            
-            continuation.yield(.quotes(snapshot))
+            throttle.start()
+            quotesDataSource.connect(symbols: symbols)
         }
+    }
+
+    private func stopFeed(_ id: Int) {
+        guard id == subscriptionID else { return }
+        
+        continuation = nil
+        throttle.stop()
+        quotesDataSource.disconnect()
     }
     
     private func handle(_ ticks: [MarketTickDTO]) {
         let receivedAt = Date()
         
-        let quotes = ticks.map { MarketsMapper.map($0, receivedAt: receivedAt) }
+        let quotes = ticks.map {
+            MarketsMapper.map($0, receivedAt: receivedAt)
+        }
         
         for quote in quotes {
             latestQuotes[quote.symbol] = quote
         }
         
-        broadcast(.quotes(quotes))
-    }
-    
-    private func removeConsumer(_ id: UUID) {
-        consumers[id] = nil
-        
-        guard consumers.isEmpty else {
-            resubscribe()
-            
-            return
-        }
-        
-        throttle.stop()
-        quotesDataSource.disconnect()
-    }
-    
-    private func resubscribe() {
-        let symbols = consumers.values.reduce(into: Set<String>()) {
-            $0.formUnion($1.symbols)
-        }
-        
-        guard !symbols.isEmpty else { return }
-        
-        throttle.start()
-        quotesDataSource.connect(symbols: symbols.sorted())
-    }
-    
-    private func broadcast(_ update: MarketsUpdate) {
-        for consumer in consumers.values {
-            consumer.continuation.yield(update)
-        }
+        continuation?.yield(.quotes(quotes))
     }
 }

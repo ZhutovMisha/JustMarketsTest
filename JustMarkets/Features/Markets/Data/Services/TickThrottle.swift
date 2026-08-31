@@ -6,6 +6,7 @@
 //
 import Foundation
 
+@MainActor
 final class TickThrottle {
     
     typealias OnTicks = ([MarketTickDTO]) -> Void
@@ -16,7 +17,7 @@ final class TickThrottle {
     
     var onTicks: OnTicks?
     
-    init(interval: Duration = .milliseconds(200)) {
+    init(interval: Duration = .milliseconds(100)) {
         self.interval = interval
     }
     

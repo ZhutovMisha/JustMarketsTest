@@ -6,7 +6,7 @@
 //
 import Foundation
 
-enum MarketStatus: Sendable, Equatable {
+enum MarketStatus: Equatable {
     
     static let staleInterval: TimeInterval = 60
     

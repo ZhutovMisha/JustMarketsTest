@@ -11,21 +11,17 @@ final class MarketsViewController: BaseViewController<MarketsMainView> {
     
     typealias OnSymbolSelected = (MarketSymbol) -> Void
     typealias OnConnectionStateChanged = (MarketConnectionState) -> Void
-    private typealias DataSource =
-        UICollectionViewDiffableDataSource<Section, MarketSymbol>
     
-   
+    private typealias DataSource = UICollectionViewDiffableDataSource<Section, MarketSymbol>
+    
     var onSymbolSelected: OnSymbolSelected?
     var onConnectionStateChanged: OnConnectionStateChanged?
     
-    private nonisolated enum Section {
+    private enum Section {
         
         case markets
     }
-    
-    private let viewModel: MarketsViewModel
-    private var pendingSlideDirection: CGFloat?
-    
+
     private lazy var dataSource: DataSource = {
         DataSource(collectionView: mainView.collectionView) {
             [weak self] collectionView, indexPath, symbol in
@@ -44,6 +40,9 @@ final class MarketsViewController: BaseViewController<MarketsMainView> {
             return cell
         }
     }()
+    
+    private let viewModel: MarketsViewModel
+    private var pendingSlideDirection: CGFloat?
     
     init(viewModel: MarketsViewModel) {
         self.viewModel = viewModel
@@ -106,9 +105,7 @@ private extension MarketsViewController {
         pendingSlideDirection = nil
         
         dataSource.apply(snapshot, animatingDifferences: slideDirection == nil) { [weak self] in
-            guard
-                let self,
-                let slideDirection
+            guard  let self, let slideDirection
             else {
                 return
             }
@@ -131,6 +128,15 @@ private extension MarketsViewController {
             }
             
             cell.configure(with: viewModel.row(for: symbol), showsSeparator: indexPath.item > 0)
+        }
+    }
+    
+    func dismissSearchKeyboard() {
+        guard mainView.searchBar.isFirstResponder else { return }
+        
+        UIView.performWithoutAnimation {
+            mainView.searchBar.resignFirstResponder()
+            mainView.layoutIfNeeded()
         }
     }
     
@@ -188,6 +194,8 @@ extension MarketsViewController: UICollectionViewDelegate {
         guard let symbol = dataSource.itemIdentifier(for: indexPath) else {
             return
         }
+        
+        dismissSearchKeyboard()
         
         onSymbolSelected?(symbol)
     }

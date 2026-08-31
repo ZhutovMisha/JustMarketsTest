@@ -7,9 +7,9 @@
 
 import Foundation
 
-nonisolated struct OhlcResponseDTO: Decodable, Sendable {
+struct OhlcResponseDTO: Decodable {
     
-    struct Bar: Decodable, Sendable {
+    struct Bar: Decodable {
         let openTime: Date
         let open: Decimal
         let high: Decimal

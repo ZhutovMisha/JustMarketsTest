@@ -7,7 +7,7 @@
 
 import Foundation
 
-nonisolated enum MarketsMapper {
+enum MarketsMapper {
     
     static func map(_ dto: MarketSymbolDTO) -> MarketSymbol? {
         guard let type = MarketType(rawValue: dto.type) else {

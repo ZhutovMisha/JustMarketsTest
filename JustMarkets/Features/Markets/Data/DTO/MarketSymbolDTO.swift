@@ -5,7 +5,7 @@
 //  Created by Zhutov Mykhailo on 29.08.2026.
 //
 
-nonisolated struct MarketSymbolDTO: Decodable, Sendable {
+struct MarketSymbolDTO: Decodable {
     
     let name: String
     let description: String

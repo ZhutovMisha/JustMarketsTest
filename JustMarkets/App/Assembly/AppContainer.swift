@@ -5,31 +5,36 @@
 //  Created by Zhutov Mykhailo on 30.08.2026.
 //
 
+@MainActor
 final class AppContainer {
     
-    private(set) lazy var networkMonitor = NetworkMonitor()
+    let networkMonitor: NetworkMonitor
     
-    private let configuration: NetworkConfiguration = .production
+    private let networkClient: NetworkClient
+    private let coreDataStack: CoreDataStack
+    private let marketsRepository: MarketsRepository
+    private let favoritesRepository: FavoritesRepository
+    private let symbolDetailsRepository: RemoteSymbolDetailsRepository
     
-    private lazy var networkClient: NetworkClient = AFNetworkClient(configuration: configuration)
-    
-    private lazy var marketsRepository: MarketsRepository = RemoteMarketsRepository(
-        networkClient: networkClient,
-        quotesDataSource: MarketsWebSocket(),
-        throttle: TickThrottle()
-    )
-    
-    private lazy var favoritesRepository: FavoritesRepository = CoreDataFavoritesRepository(stack: coreDataStack)
-    
-    private lazy var symbolDetailsRepository = RemoteSymbolDetailsRepository(networkClient: networkClient)
-    
-    private lazy var coreDataStack: CoreDataStack = {
+    init(configuration: NetworkConfiguration = .production) {
         do {
-            return try CoreDataStack()
+            coreDataStack = try CoreDataStack()
         } catch {
             fatalError("Failed to load the local store: \(error)")
         }
-    }()
+        
+        networkMonitor = NetworkMonitor()
+        networkClient = AFNetworkClient(configuration: configuration)
+        
+        marketsRepository = RemoteMarketsRepository(
+            networkClient: networkClient,
+            quotesDataSource: MarketsWebSocket(),
+            throttle: TickThrottle()
+        )
+        
+        favoritesRepository = CoreDataFavoritesRepository(stack: coreDataStack)
+        symbolDetailsRepository = RemoteSymbolDetailsRepository(networkClient: networkClient)
+    }
     
     func makeMarketsModule() -> MarketsViewController {
         let viewModel = MarketsViewModel(

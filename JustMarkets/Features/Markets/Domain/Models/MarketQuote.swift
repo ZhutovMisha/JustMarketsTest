@@ -7,7 +7,7 @@
 
 import Foundation
 
-nonisolated struct MarketQuote: Sendable, Equatable {
+struct MarketQuote: Equatable {
     
     let symbol: String
     let price: Decimal

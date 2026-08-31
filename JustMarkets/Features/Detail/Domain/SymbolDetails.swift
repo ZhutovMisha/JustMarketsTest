@@ -7,7 +7,7 @@
 
 import Foundation
 
-nonisolated struct SymbolDetails: Sendable, Equatable {
+struct SymbolDetails: Equatable {
     
     let name: String
     let title: String

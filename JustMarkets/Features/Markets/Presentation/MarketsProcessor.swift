@@ -7,7 +7,7 @@
 
 import Foundation
 
-nonisolated final class MarketsProcessor {
+final class MarketsProcessor {
     
     private static let placeholder = "—"
     

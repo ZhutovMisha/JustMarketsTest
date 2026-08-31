@@ -5,7 +5,7 @@
 //  Created by Zhutov Mykhailo on 30.08.2026.
 //
 
-nonisolated enum MarketCategory: String, Sendable, CaseIterable {
+enum MarketCategory: String, CaseIterable {
     
     case all = "All"
     case favorites = "Favorites"

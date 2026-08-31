@@ -16,11 +16,23 @@ final class MarketsMainView: BaseView {
     
     let searchBar: UISearchBar = {
         let searchBar = UISearchBar()
-        searchBar.placeholder = "Search"
         searchBar.searchBarStyle = .minimal
-        searchBar.barStyle = .black
         searchBar.autocapitalizationType = .allCharacters
         searchBar.autocorrectionType = .no
+        searchBar.keyboardAppearance = .dark
+        searchBar.tintColor = Theme.Colors.primaryText
+        
+        let textField = searchBar.searchTextField
+        textField.backgroundColor = Theme.Colors.fieldBackground
+        textField.textColor = Theme.Colors.primaryText
+        textField.leftView?.tintColor = Theme.Colors.secondaryText
+        textField.attributedPlaceholder = NSAttributedString(
+            string: "Search",
+            attributes: [
+                .foregroundColor: Theme.Colors.secondaryText
+            ]
+        )
+        
         return searchBar
     }()
     
@@ -109,7 +121,7 @@ final class MarketsMainView: BaseView {
         contentStackView.snp.makeConstraints { make in
             make.top.equalTo(safeAreaLayoutGuide.snp.top).offset(Theme.Spacing.medium)
             make.horizontalEdges.equalToSuperview()
-            make.bottom.equalTo(safeAreaLayoutGuide.snp.bottom)
+            make.bottom.equalToSuperview()
         }
         
         emptyStateLabel.snp.makeConstraints { make in

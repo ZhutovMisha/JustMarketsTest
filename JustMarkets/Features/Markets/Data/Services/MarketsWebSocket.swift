@@ -79,13 +79,16 @@ final class MarketsWebSocket: MarketsQuotesDataSource {
     }
     
     func connect(symbols: [String]) {
-        self.symbols = symbols
-        
         guard !isStarted else {
+            guard symbols != self.symbols else { return }
+            
+            self.symbols = symbols
             subscribe()
+            
             return
         }
         
+        self.symbols = symbols
         isStarted = true
         
         onConnectionChanged?(.connecting)

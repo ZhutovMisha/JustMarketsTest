@@ -7,7 +7,7 @@
 
 import Foundation
 
-nonisolated struct SymbolDetailsDTO: Decodable, Sendable {
+struct SymbolDetailsDTO: Decodable {
     
     let name: String
     let description: String

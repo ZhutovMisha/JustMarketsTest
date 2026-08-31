@@ -7,6 +7,7 @@
 
 import Foundation
 
+@MainActor
 final class MarketsViewModel {
     
     typealias OnChange = () -> Void
