@@ -1,0 +1,70 @@
+JustMarkets/Core/Storage/JustMarketsModel.xcdatamodeld/JustMarketsModel.xcdatamodel/contents
+  s_4917fd541a3836::t_95fad40162b891 1-12
+JustMarkets/App/SceneDelegate.swift
+  s_fd3d677a12ce06::t_efab2479fa690b 10-11,13-15
+JustMarkets.xcodeproj/project.pbxproj
+  s_4917fd541a3836::t_38c9bf3670c09b 12-13,62-63,119-120,180-181,268,304,449,474,521,523,526,529,531,534-542,558-567
+JustMarkets/App/Coordinator/AppCoordinator.swift
+  s_4917fd541a3836::t_070e226e456eb6 32,100
+  s_fd3d677a12ce06::t_efab2479fa690b 12-24,43-70
+  s_fd3d677a12ce06::t_c58cf7e03e69c8 1-11,25-31,33-42,71-99,101-104
+JustMarkets/Core/UI/StatusNavigationController.swift
+  s_4917fd541a3836::t_ce71829122c85b 1-19,21-123
+  s_fd3d677a12ce06::t_efab2479fa690b 20
+JustMarkets/App/Assembly/AppContainer.swift
+  s_fd3d677a12ce06::t_1f76ea71495d85 1-58
+JustMarkets/Core/Extensions/UIControl+Action.swift
+  s_fd3d677a12ce06::t_69550a31d2c32a 1-17
+JustMarkets/Core/Network/Endpoint.swift
+  s_4917fd541a3836::t_0424be421446bf 19-20
+JustMarkets/Core/DesignSystem/Theme.swift
+  s_fd3d677a12ce06::t_1a1264d3fba1c5 1-55
+JustMarkets/Core/Network/NetworkMonitor.swift
+  s_4917fd541a3836::t_239f8f29e629c7 1-42
+JustMarkets/App/AppDelegate.swift
+  s_fd3d677a12ce06::t_efab2479fa690b 11
+.gitignore
+  s_a7ab280115cefc::t_6de27634cb50e8 1-24
+JustMarkets.xcodeproj/project.xcworkspace/xcshareddata/swiftpm/Package.resolved
+  s_a7ab280115cefc::t_362ca0aad9ee74 2,14,16,18-28
+JustMarkets/Core/Extensions/UIViewController+Alert.swift
+  s_a7ab280115cefc::t_ec7b3bc54e1328 2,10-21
+JustMarkets/Core/Network/NetworkConfiguration.swift
+  s_a7ab280115cefc::t_b0ce753c7d9065 11-15,39
+JustMarkets/Core/Storage/JustMarketsModel.xcdatamodeld/.xccurrentversion
+  s_a7ab280115cefc::t_bc45335c8b1b51 6
+JustMarkets/Core/UI/SegmentControl.swift
+  s_a7ab280115cefc::t_57ed69a5a5fbde 20,29,34-35,47,54,60,66,80,105,119-120,133-134,145-147,151,154-156,163,213
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.6.10",
+  "base_commit_sha": "fa2a702885cce3a780f8156e49bf28112b175fc0",
+  "prompts": {},
+  "sessions": {
+    "s_4917fd541a3836": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "8fa9c59c-b1f0-4a97-bea2-fc5ca3d26a99",
+        "model": "claude-opus-5"
+      },
+      "human_author": "Mykhailo Zhutov <zhutov.misha@gmail.com>"
+    },
+    "s_a7ab280115cefc": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "a525711c-5333-462e-b05d-ce621a0b02a4",
+        "model": "claude-opus-5"
+      },
+      "human_author": "Mykhailo Zhutov <zhutov.misha@gmail.com>"
+    },
+    "s_fd3d677a12ce06": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "18ab4141-a823-4e2d-a0ba-8da101d9b9c6",
+        "model": "claude-opus-5"
+      },
+      "human_author": "Mykhailo Zhutov <zhutov.misha@gmail.com>"
+    }
+  }
+}
