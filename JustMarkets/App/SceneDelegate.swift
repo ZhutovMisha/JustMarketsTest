@@ -23,8 +23,9 @@ final class SceneDelegate: UIResponder, UIWindowSceneDelegate {
         let window = UIWindow(windowScene: windowScene)
        
         window.overrideUserInterfaceStyle = .dark
-        window.rootViewController = coordinator.start()
         window.makeKeyAndVisible()
+        
+        coordinator.start(in: window)
         
         self.window = window
     }

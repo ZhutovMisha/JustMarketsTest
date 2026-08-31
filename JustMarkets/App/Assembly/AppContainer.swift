@@ -36,6 +36,10 @@ final class AppContainer {
         symbolDetailsRepository = RemoteSymbolDetailsRepository(networkClient: networkClient)
     }
     
+    func makeSplashModule() -> SplashViewController {
+        SplashViewController()
+    }
+    
     func makeMarketsModule() -> MarketsViewController {
         let viewModel = MarketsViewModel(
             dependencies: .init(

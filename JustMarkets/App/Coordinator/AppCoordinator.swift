@@ -10,8 +10,12 @@ import UIKit
 @MainActor
 final class AppCoordinator {
     
+    private static let rootTransitionDuration: TimeInterval = 0.3
+    
     private let container: AppContainer
     private let navigationController = StatusNavigationController()
+    
+    private weak var window: UIWindow?
     
     private var isNetworkAvailable = true
     private var isFeedConnected = true
@@ -29,16 +33,36 @@ final class AppCoordinator {
         networkTask?.cancel()
     }
     
-    func start() -> UIViewController {
-        navigationController.setViewControllers([makeMarkets()], animated: false)
+    func start(in window: UIWindow) {
+        self.window = window
         
-        return navigationController
+        let splash = container.makeSplashModule()
+        
+        splash.onFinished = { [weak self] in
+            self?.showMarkets()
+        }
+        
+        window.rootViewController = splash
     }
 }
 
 // MARK: - Markets
 
 private extension AppCoordinator {
+    
+    func showMarkets() {
+        guard let window else { return }
+        
+        navigationController.setViewControllers([makeMarkets()], animated: false)
+        
+        UIView.transition(
+            with: window,
+            duration: Self.rootTransitionDuration,
+            options: [.transitionCrossDissolve]
+        ) {
+            window.rootViewController = self.navigationController
+        }
+    }
     
     func makeMarkets() -> UIViewController {
         let markets = container.makeMarketsModule()
