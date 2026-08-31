@@ -14,6 +14,14 @@ reviews:
   auto_review:
     enabled: true
     drafts: false
+    # Review PRs are stacked onto non-default bases; without this CodeRabbit
+    # skips them with "auto reviews are disabled on base/target branches
+    # other than the default branch".
+    base_branches:
+      - "baseline"
+      - "feat/.*"
+      - "refactor/.*"
+      - "test/.*"
 
   path_filters:
     - "!**/*.pbxproj"
