@@ -74,6 +74,9 @@ final class MarketsViewModel {
         return "No markets in this category"
     }
     
+    /// Creates a market row for the specified symbol using its current quote, status, and favorite state.
+    /// - Parameter symbol: The market symbol to represent.
+    /// - Returns: A configured market row for the symbol.
     func row(for symbol: MarketSymbol) -> MarketRow {
         let quote = quotes[symbol.name]
         
@@ -89,6 +92,8 @@ final class MarketsViewModel {
         )
     }
     
+    /// Loads market symbols and favorites, updates the visible symbols, and starts the required market subscriptions. 
+    /// Reports loading and non-cancellation errors through the corresponding callbacks.
     func loadData() {
         loadTask?.cancel()
         
@@ -132,6 +137,8 @@ final class MarketsViewModel {
         }
     }
     
+    /// Selects a market category and refreshes the visible symbols and subscriptions.
+    /// - Parameter category: The category to select.
     func selectCategory(_ category: MarketCategory) {
         guard category != selectedCategory else {
             return
@@ -144,6 +151,8 @@ final class MarketsViewModel {
         resubscribeIfNeeded()
     }
     
+    /// Schedules a debounced search for the provided query, replacing any previously scheduled search.
+    /// - Parameter query: The search text to apply.
     func search(_ query: String) {
         searchTask?.cancel()
         
@@ -158,6 +167,8 @@ final class MarketsViewModel {
         }
     }
     
+    /// Toggles the favorite state of a market symbol and updates the visible symbols and subscriptions.
+    /// - Parameter symbol: The market symbol whose favorite state should change.
     func toggleFavorite(for symbol: String) {
         do {
             favorites = try dependencies.favoritesRepository.toggle(symbol)
@@ -175,6 +186,8 @@ final class MarketsViewModel {
 
 private extension MarketsViewModel {
     
+    /// Applies a search query and updates the visible market symbols.
+    /// - Parameter query: The search text used to filter market symbols.
     func applySearch(_ query: String) {
         guard query != self.query else {
             return
@@ -186,6 +199,7 @@ private extension MarketsViewModel {
         onChange?()
     }
     
+    /// Updates the visible symbols using the selected category, favorites, and search query.
     func refreshVisibleSymbols() {
         visibleSymbols = MarketsFilter.symbols(
             symbols,
@@ -195,6 +209,7 @@ private extension MarketsViewModel {
         )
     }
   
+    /// Updates the market subscription when the required symbol set changes.
     func resubscribeIfNeeded() {
         let names = MarketsFilter.symbols(
             symbols,
@@ -220,6 +235,8 @@ private extension MarketsViewModel {
         }
     }
     
+    /// Applies a market update to the view model and notifies observers of quote or connection changes.
+    /// - Parameter update: The quote or connection update to apply.
     func apply(_ update: MarketsUpdate) {
         switch update {
         case .quotes(let quotes):

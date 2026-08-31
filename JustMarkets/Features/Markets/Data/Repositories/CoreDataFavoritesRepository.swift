@@ -16,6 +16,8 @@ final class CoreDataFavoritesRepository: FavoritesRepository {
         self.stack = stack
     }
     
+    /// Retrieves favorite symbols ordered from most recently added to oldest.
+    /// - Returns: The stored favorite symbol names.
     func favorites() throws -> [String] {
         let request = FavoriteSymbolEntity.fetchRequest()
         request.sortDescriptors = [
@@ -27,6 +29,10 @@ final class CoreDataFavoritesRepository: FavoritesRepository {
             .compactMap(\.symbol)
     }
     
+    /// Toggles the favorite status of a symbol and retrieves the updated favorites.
+    /// - Parameter symbol: The symbol whose favorite status should be toggled.
+    /// - Returns: The updated list of favorite symbols.
+    /// - Throws: An error if the favorite cannot be fetched, saved, or retrieved.
     func toggle(_ symbol: String) throws -> [String] {
         let context = stack.viewContext
         

@@ -27,6 +27,11 @@ final class AFNetworkClient: NetworkClient {
         session = Session(configuration: sessionConfiguration)
     }
     
+    /// Sends a request to the specified endpoint and decodes the response.
+    /// - Parameters:
+    ///   - endpoint: The endpoint defining the request details.
+    ///   - responseType: The type used to decode the response.
+    /// - Returns: The decoded response value.
     func request<T: Decodable>(_ endpoint: Endpoint, responseType: T.Type) async throws -> T {
         try await session
             .request(

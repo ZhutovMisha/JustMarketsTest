@@ -9,6 +9,10 @@ import UIKit
 
 extension UIViewController {
 
+    /// Presents an alert with the specified title and message.
+    /// - Parameters:
+    ///   - title: The alert title. Defaults to `"Error"`.
+    ///   - message: The message displayed in the alert.
     func showAlert(title: String = "Error", message: String) {
         let alert = UIAlertController(
             title: title,

@@ -30,6 +30,10 @@ final class StatusNavigationController: UINavigationController {
         applyStatus()
     }
     
+    /// Updates the navigation controller's status and schedules a return to normal after a successful status.
+    ///
+    /// - Parameter newStatus: The status to apply.
+    /// - Note: Applying a success status automatically resets the status to normal after two seconds unless the task is cancelled.
     func setStatus(_ newStatus: Status) {
         guard newStatus != status else { return }
         
@@ -55,7 +59,7 @@ final class StatusNavigationController: UINavigationController {
 private extension StatusNavigationController {
     
     /// A push or pop already owns the navigation bar: repainting it mid-flight
-    /// is what makes the bar flicker, so the status waits for the transition.
+    /// Applies the current status appearance and root view controller title, deferring the updates until any active navigation transition completes.
     func applyStatus() {
         guard let coordinator = transitionCoordinator else {
             updateAppearance()
@@ -70,6 +74,7 @@ private extension StatusNavigationController {
         }
     }
     
+    /// Applies the current status color and primary text color to the navigation bar appearance.
     func updateAppearance() {
         let appearance = UINavigationBarAppearance()
         appearance.configureWithOpaqueBackground()
@@ -85,7 +90,7 @@ private extension StatusNavigationController {
     }
     
     /// The status replaces the root title only. A pushed screen keeps its own
-    /// title — the bar colour is what reports the connection there.
+    /// Updates the root view controller’s navigation title according to the current status.
     func updateRootTitle() {
         guard let root = viewControllers.first else { return }
         

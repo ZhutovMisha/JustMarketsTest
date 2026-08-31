@@ -18,6 +18,9 @@ class BaseCollectionViewCell: UICollectionViewCell {
         fatalError("init(coder:) has not been implemented")
     }
 
+    /// Performs subclass-specific initialization.
+    ///
+    /// Subclasses must override this method to provide their initialization logic.
     func initialize() {
         fatalError("initialize() must be overridden")
     }

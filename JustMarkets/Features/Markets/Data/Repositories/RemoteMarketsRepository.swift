@@ -40,12 +40,18 @@ final class RemoteMarketsRepository: MarketsRepository {
         }
     }
     
+    /// Fetches the available market symbols.
+    /// - Returns: The mapped market symbols.
     func fetchSymbols() async throws -> [MarketSymbol] {
         try await networkClient
             .request(MarketsEndpoint.symbols,responseType: [MarketSymbolDTO].self)
             .compactMap(MarketsMapper.map)
     }
     
+    /// Creates a live market update stream for the specified symbols.
+    ///
+    /// - Parameter symbols: The symbols for which to receive market updates.
+    /// - Returns: A stream containing connection-state changes and quote updates for the specified symbols.
     func updates(for symbols: [String]) -> AsyncStream<MarketsUpdate> {
         AsyncStream { continuation in
             subscriptionID += 1
@@ -72,6 +78,8 @@ final class RemoteMarketsRepository: MarketsRepository {
         }
     }
 
+    /// Stops the active market updates feed for the specified subscription.
+    /// - Parameter id: The subscription identifier to stop.
     private func stopFeed(_ id: Int) {
         guard id == subscriptionID else { return }
         
@@ -80,6 +88,8 @@ final class RemoteMarketsRepository: MarketsRepository {
         quotesDataSource.disconnect()
     }
     
+    /// Processes incoming market ticks, updates the latest quote cache, and publishes the resulting quotes.
+    /// - Parameter ticks: The market tick data to process.
     private func handle(_ ticks: [MarketTickDTO]) {
         let receivedAt = Date()
         

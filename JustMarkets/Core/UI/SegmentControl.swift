@@ -17,6 +17,10 @@ private final class SegmentScrollView: UIScrollView {
 
 private final class SegmentButton: UIButton {
 
+    /// Configures the button with a title and font while preserving its intrinsic horizontal size.
+    /// - Parameters:
+    ///   - title: The title displayed by the button.
+    ///   - font: The font applied to the title.
     func configure(title: String, font: UIFont) {
         setTitle(title, for: .normal)
         titleLabel?.font = font
@@ -25,6 +29,8 @@ private final class SegmentButton: UIButton {
         setContentCompressionResistancePriority(.required, for: .horizontal)
     }
 
+    /// Updates the button title color based on its selection state.
+    /// - Parameter isSelected: Whether the button is selected.
     func updateColor(isSelected: Bool) {
         setTitleColor(isSelected ? Theme.Colors.primaryText : Theme.Colors.secondaryText, for: .normal)
     }
@@ -74,6 +80,11 @@ final class SegmentControl: BaseView {
         feedbackGenerator.prepare()
     }
 
+    /// Configures the segment titles, selected segment, and selection callback.
+    /// - Parameters:
+    ///   - titles: The titles displayed by the segments.
+    ///   - selectedIndex: The initially selected segment index. Invalid indices select the first segment.
+    ///   - onSelect: The closure invoked when a different segment is selected.
     func configure(
         titles: [String],
         selectedIndex: Int,
@@ -102,6 +113,9 @@ final class SegmentControl: BaseView {
         updateIndicator(animated: false)
     }
 
+    /// Handles selection of a segment at the specified index.
+    /// - Parameter index: The index of the segment to select. 
+    /// - Note: Updates the selected segment, provides haptic feedback, refreshes the selection indicator, scrolls to the segment, and invokes the selection callback.
     private func handleTap(at index: Int) {
         guard
             titles.indices.contains(index),
@@ -122,6 +136,7 @@ final class SegmentControl: BaseView {
         onSelect?(index)
     }
 
+    /// Sets up the scroll view, segment stack, separator, and selection indicator layout.
     private func setupUI() {
         addSubview(scrollView)
         addSubview(separatorView)
@@ -148,6 +163,11 @@ final class SegmentControl: BaseView {
         }
     }
 
+    /// Creates a configured segment button for the specified title and index.
+    /// - Parameters:
+    ///   - title: The title displayed by the button.
+    ///   - index: The button's segment index.
+    /// - Returns: The configured segment button.
     private func makeButton(title: String, index: Int) -> SegmentButton {
         let button = SegmentButton()
 
@@ -158,6 +178,7 @@ final class SegmentControl: BaseView {
         return button
     }
 
+    /// Updates the colors of all segment buttons to reflect the current selection.
     private func updateColors() {
         for (index, button) in buttons.enumerated() {
             button.updateColor(isSelected: index == selectedIndex)
@@ -199,6 +220,7 @@ final class SegmentControl: BaseView {
         }
     }
 
+    /// Scrolls the selected segment into the visible area.
     private func scrollToSelected() {
         guard buttons.indices.contains(selectedIndex) else {
             return

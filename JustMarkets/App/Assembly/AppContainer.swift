@@ -36,10 +36,13 @@ final class AppContainer {
         symbolDetailsRepository = RemoteSymbolDetailsRepository(networkClient: networkClient)
     }
     
+    /// Creates the splash screen module.
+    /// - Returns: A configured splash view controller.
     func makeSplashModule() -> SplashViewController {
         SplashViewController()
     }
     
+    /// Creates the markets module and its view controller.
     func makeMarketsModule() -> MarketsViewController {
         let viewModel = MarketsViewModel(
             dependencies: .init(
@@ -52,6 +55,9 @@ final class AppContainer {
         return MarketsViewController(viewModel: viewModel)
     }
     
+    /// Creates a symbol detail view controller for the specified market symbol.
+    /// - Parameter symbol: The market symbol to display.
+    /// - Returns: A configured symbol detail view controller.
     func makeSymbolDetailModule(symbol: MarketSymbol) -> SymbolDetailViewController {
         let viewModel = SymbolDetailViewModel(
             symbol: symbol,

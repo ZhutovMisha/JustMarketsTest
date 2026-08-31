@@ -19,6 +19,8 @@ final class NetworkMonitor {
         monitor.cancel()
     }
     
+    /// Creates a stream of network connectivity status updates.
+    /// - Returns: A stream that emits `true` when the network path is satisfied and `false` otherwise.
     func isConnected() -> AsyncStream<Bool> {
         AsyncStream { continuation in
             monitor.pathUpdateHandler = { path in

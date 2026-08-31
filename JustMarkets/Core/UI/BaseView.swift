@@ -19,6 +19,7 @@ class BaseView: UIView {
         fatalError("init(coder:) has not been implemented")
     }
 
+    /// Provides the initialization hook that subclasses must override.
     func initialize() {
         fatalError("BaseView.initialize() must be overridden")
     }

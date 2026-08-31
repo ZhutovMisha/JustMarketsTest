@@ -92,6 +92,7 @@ final class SymbolDetailViewModel {
         ]
     }
     
+    /// Loads the symbol details and candle data, replacing any active load operation.
     func load() {
         loadTask?.cancel()
         
@@ -100,6 +101,7 @@ final class SymbolDetailViewModel {
         }
     }
     
+    /// Loads the symbol’s details and candles for the selected interval, then begins observing quote updates.
     private func performLoad() async {
         onLoadingChanged?(true)
         
@@ -132,6 +134,8 @@ final class SymbolDetailViewModel {
         }
     }
     
+    /// Selects a candle interval and loads candles for it.
+    /// - Parameter interval: The candle interval to select.
     func selectInterval(_ interval: CandleInterval) {
         guard interval != selectedInterval else { return }
         
@@ -144,6 +148,8 @@ final class SymbolDetailViewModel {
         }
     }
     
+    /// Loads candle data for the specified interval and updates observers when the data is available.
+    /// - Parameter interval: The candle interval to load.
     private func performLoadCandles(for interval: CandleInterval) async {
         onLoadingChanged?(true)
         
@@ -169,14 +175,19 @@ final class SymbolDetailViewModel {
         }
     }
     
+    /// Formats a price value using the symbol's configured number of digits.
+    /// - Parameter value: The price value to format.
+    /// - Returns: The formatted price string.
     private func price(_ value: Decimal?) -> String {
         dependencies.processor.price(value, digits: symbol.digits)
     }
     
+    /// Formats a decimal amount for display.
     private func amount(_ value: Decimal) -> String {
         dependencies.processor.amount(value)
     }
     
+    /// Observes market updates for the current symbol and applies matching quotes.
     private func observeQuotes() {
         let name = symbol.name
         
@@ -198,6 +209,7 @@ final class SymbolDetailViewModel {
         }
     }
     
+    /// Applies a market quote and notifies observers of the update.
     private func apply(_ quote: MarketQuote) {
         self.quote = quote
         onQuoteChanged?()

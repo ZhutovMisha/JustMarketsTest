@@ -24,6 +24,9 @@ final class CandleDateFormatter: NSObject, AxisValueFormatter {
         super.init()
     }
     
+    /// Formats the date at the axis value's nearest candle index.
+    /// - Parameter value: The axis value used to select a date.
+    /// - Returns: The formatted date, or an empty string when the index is outside the available dates.
     func stringForValue(_ value: Double, axis: AxisBase?) -> String {
         let index = Int(value.rounded())
         

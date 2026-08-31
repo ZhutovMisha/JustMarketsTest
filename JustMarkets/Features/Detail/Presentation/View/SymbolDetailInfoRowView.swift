@@ -25,6 +25,7 @@ final class SymbolDetailInfoRowView: BaseView {
         return label
     }()
     
+    /// Sets up the title and value labels with leading and trailing alignment and a minimum spacing between them.
     override func initialize() {
         addSubview(titleLabel)
         addSubview(valueLabel)
@@ -39,6 +40,8 @@ final class SymbolDetailInfoRowView: BaseView {
         }
     }
     
+    /// Configures the row with the specified title and value.
+    /// - Parameter row: The information row to display.
     func configure(with row: SymbolDetailInfoRow) {
         titleLabel.text = row.title
         valueLabel.text = row.value

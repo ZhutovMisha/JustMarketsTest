@@ -105,6 +105,7 @@ final class MarketCollectionViewCell: BaseCollectionViewCell {
     
     var onFavoriteTapped: OnFavoriteTapped?
     
+    /// Resets the cell's callback and price animation state before it is reused.
     override func prepareForReuse() {
         super.prepareForReuse()
 
@@ -112,6 +113,7 @@ final class MarketCollectionViewCell: BaseCollectionViewCell {
         priceLabel.layer.removeAllAnimations()
     }
     
+    /// Builds the cell's view hierarchy and applies its layout constraints.
     override func initialize() {
         setupHierarchy()
         setupConstraints()
@@ -139,6 +141,7 @@ final class MarketCollectionViewCell: BaseCollectionViewCell {
         contentView.addSubview(separator)
     }
     
+    /// Configures the layout constraints for the cell's content, status badge, quote stack, favorite button, and separator.
     private func setupConstraints() {
         favoriteButton.snp.makeConstraints { make in
             make.centerY.equalToSuperview()
@@ -171,7 +174,11 @@ final class MarketCollectionViewCell: BaseCollectionViewCell {
         }
     }
     
-    // MARK: - Configuration
+    /// Configures the cell with market data and updates its separator visibility.
+    ///
+    /// - Parameters:
+    ///   - row: The market data to display.
+    ///   - showsSeparator: A Boolean value indicating whether to show the separator.
     
     func configure(with row: MarketRow, showsSeparator: Bool) {
         symbolLabel.text = row.symbol
@@ -187,6 +194,8 @@ final class MarketCollectionViewCell: BaseCollectionViewCell {
         updatePrice(row.price)
     }
     
+    /// Configures the status badge for the market instrument.
+    /// - Parameter status: The instrument status used to determine the badge's visibility, text, and color.
     private func configureStatus(_ status: MarketStatus) {
         statusBadge.isHidden = status == .live
         
@@ -208,6 +217,9 @@ final class MarketCollectionViewCell: BaseCollectionViewCell {
         }
     }
     
+    /// Maps a market trend to its corresponding theme color.
+    /// - Parameter trend: The market trend to style.
+    /// - Returns: The positive, negative, or neutral theme color for the trend.
     private func color(for trend: MarketRow.Trend) -> UIColor {
         switch trend {
         case .up: Theme.Colors.positive
@@ -216,6 +228,8 @@ final class MarketCollectionViewCell: BaseCollectionViewCell {
         }
     }
     
+    /// Updates the displayed price with a brief fade transition.
+    /// - Parameter text: The new price text.
     private func updatePrice(_ text: String) {
         let transition = CATransition()
         transition.type = .fade

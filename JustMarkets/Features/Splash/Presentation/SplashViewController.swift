@@ -15,6 +15,8 @@ final class SplashViewController: BaseViewController<SplashMainView> {
     
     private var hasPlayed = false
     
+    /// Starts the splash animation the first time the view appears and invokes the completion callback afterward.
+    /// - Parameter animated: Indicates whether the view appearance is animated.
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
         

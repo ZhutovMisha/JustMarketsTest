@@ -25,6 +25,7 @@ final class TickThrottle {
         task?.cancel()
     }
     
+    /// Starts periodically delivering pending ticks at the configured interval.
     func start() {
         guard task == nil else { return }
         
@@ -41,16 +42,20 @@ final class TickThrottle {
         }
     }
     
+    /// Stops periodic tick delivery and discards all pending ticks.
     func stop() {
         task?.cancel()
         task = nil
         pendingTicks.removeAll()
     }
     
+    /// Adds a market tick, replacing any pending tick for the same symbol.
+    /// - Parameter tick: The market tick to queue.
     func add(_ tick: MarketTickDTO) {
         pendingTicks[tick.symbol] = tick
     }
     
+    /// Delivers all pending ticks and clears the pending collection.
     private func sendPendingTicks() {
         guard !pendingTicks.isEmpty else { return }
         

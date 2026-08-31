@@ -27,10 +27,13 @@ final class SplashMainView: BaseView {
         return view
     }()
     
+    /// Initializes the view's user interface.
     override func initialize() {
         setupUI()
     }
     
+    /// Plays the splash animation and invokes the completion handler when it finishes or is unavailable.
+    /// - Parameter finished: The closure called after the animation completes or cannot be played.
     func playAnimation(then finished: @escaping OnAnimationFinished) {
         guard animationView.animation != nil else {
             finished()
@@ -43,6 +46,7 @@ final class SplashMainView: BaseView {
         }
     }
     
+    /// Configures the view background and centers the splash animation at its fixed size.
     private func setupUI() {
         backgroundColor = Theme.Colors.background
         

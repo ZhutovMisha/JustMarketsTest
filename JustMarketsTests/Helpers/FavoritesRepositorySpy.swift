@@ -26,12 +26,17 @@ final class FavoritesRepositorySpy {
 
 extension FavoritesRepositorySpy: FavoritesRepository {
     
+    /// Retrieves the stored favorite symbols.
+    /// - Returns: The stored favorite symbols.
     func favorites() throws -> [String] {
         messages.append(.favorites)
         
         return stored
     }
     
+    /// Toggles a symbol in the stored favorites.
+    /// - Parameter symbol: The symbol to add or remove.
+    /// - Returns: The updated list of favorite symbols.
     func toggle(_ symbol: String) throws -> [String] {
         messages.append(.toggle(symbol))
         

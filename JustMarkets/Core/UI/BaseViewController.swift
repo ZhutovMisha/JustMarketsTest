@@ -20,6 +20,7 @@ class BaseViewController<MainView: UIView>: UIViewController {
         fatalError("init(coder:) has not been implemented")
     }
 
+    /// Assigns the typed main view as the view controller's root view.
     override func loadView() {
         view = mainView
     }

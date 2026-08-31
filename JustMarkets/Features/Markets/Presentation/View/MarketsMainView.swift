@@ -69,15 +69,19 @@ final class MarketsMainView: BaseView {
         return view
     }()
     
+    /// Initializes the view's user interface.
     override func initialize() {
         setupUI()
     }
     
+    /// Updates the empty-state message and controls the label's visibility.
+    /// - Parameter message: The message to display, or `nil` to hide the empty-state label.
     func setEmptyMessage(_ message: String?) {
         emptyStateLabel.text = message
         emptyStateLabel.isHidden = message == nil
     }
     
+    /// Scrolls the market collection view to its top content position without animation.
     func scrollToTop() {
         collectionView.setContentOffset(
             CGPoint(x: 0, y: -collectionView.adjustedContentInset.top),
@@ -85,6 +89,8 @@ final class MarketsMainView: BaseView {
         )
     }
     
+    /// Starts or stops the loading activity indicator.
+    /// - Parameter isAnimating: Whether the activity indicator should animate.
     func setAnimating(_ isAnimating: Bool) {
         if isAnimating {
             activityIndicator.startAnimating()
@@ -93,6 +99,8 @@ final class MarketsMainView: BaseView {
         }
     }
     
+    /// Slides the collection view into its resting position from the specified horizontal direction.
+    /// - Parameter direction: The horizontal direction and offset multiplier for the initial position.
     func slideInCollection(direction: CGFloat) {
         collectionView.transform = CGAffineTransform(translationX: collectionView.bounds.width * direction, y: 0)
         
@@ -105,6 +113,7 @@ final class MarketsMainView: BaseView {
         }
     }
     
+    /// Configures the view hierarchy, styling, and layout constraints for the market content view.
     private func setupUI() {
         backgroundColor = Theme.Colors.background
         
@@ -139,6 +148,7 @@ final class MarketsMainView: BaseView {
 
 extension MarketsMainView {
     
+    /// Creates the compositional layout for the market collection view.
     private func makeLayout() -> UICollectionViewCompositionalLayout {
         UICollectionViewCompositionalLayout { sectionIndex, _ in
             switch sectionIndex {
@@ -151,6 +161,7 @@ extension MarketsMainView {
         }
     }
     
+    /// Creates the collection view layout section for displaying market items.
     private static func makeMarketsSection() -> NSCollectionLayoutSection {
         let itemSize = NSCollectionLayoutSize(widthDimension: .fractionalWidth(1), heightDimension: .estimated(64))
         

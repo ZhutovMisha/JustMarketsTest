@@ -20,6 +20,7 @@ final class SymbolDetailViewController: BaseViewController<SymbolDetailMainView>
         fatalError("init(coder:) has not been implemented")
     }
     
+    /// Configures the view controller and begins loading symbol details when its view is loaded.
     override func viewDidLoad() {
         super.viewDidLoad()
         
@@ -31,6 +32,7 @@ final class SymbolDetailViewController: BaseViewController<SymbolDetailMainView>
         viewModel.load()
     }
     
+    /// Binds view model updates to the view controller's rendering, loading, and error presentation.
     private func bindViewModel() {
         viewModel.onChange = { [weak self] in
             self?.render()
@@ -49,6 +51,7 @@ final class SymbolDetailViewController: BaseViewController<SymbolDetailMainView>
         }
     }
     
+    /// Configures the interval control with the available intervals and forwards valid selections to the view model.
     private func configureIntervalControl() {
         let intervals = viewModel.intervals
         
@@ -69,6 +72,7 @@ final class SymbolDetailViewController: BaseViewController<SymbolDetailMainView>
         }
     }
     
+    /// Updates the main view to reflect the current symbol details.
     private func render() {
         mainView.configure(with: makeConfig())
     }
@@ -78,6 +82,8 @@ final class SymbolDetailViewController: BaseViewController<SymbolDetailMainView>
 
 extension SymbolDetailViewController {
     
+    /// Creates the main view configuration from the current view model state.
+    /// - Returns: A configuration containing the symbol details, market status, chart data, quotes, and specifications.
     private func makeConfig() -> SymbolDetailMainView.Config {
         SymbolDetailMainView.Config(
             subtitle: viewModel.subtitle,
@@ -92,6 +98,9 @@ extension SymbolDetailViewController {
         )
     }
     
+    /// Provides the display text associated with a market status.
+    /// - Parameter status: The market status to describe.
+    /// - Returns: The corresponding status text, or `nil` when the market is live.
     private func title(for status: MarketStatus) -> String? {
         switch status {
         case .live: nil
@@ -101,6 +110,9 @@ extension SymbolDetailViewController {
         }
     }
     
+    /// Maps a market trend to its corresponding theme color.
+    /// - Parameter trend: The market trend to represent.
+    /// - Returns: The theme color associated with the trend.
     private func color(for trend: MarketRow.Trend) -> UIColor {
         switch trend {
         case .up: Theme.Colors.positive

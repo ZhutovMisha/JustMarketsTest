@@ -35,6 +35,8 @@ final class CoreDataStack {
         container.viewContext
     }
     
+    /// Saves changes in the view context.
+    /// - Throws: An error if saving the view context fails.
     func save() throws {
         guard viewContext.hasChanges else { return }
         

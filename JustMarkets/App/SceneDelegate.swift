@@ -13,6 +13,11 @@ final class SceneDelegate: UIResponder, UIWindowSceneDelegate {
     
     private let coordinator = AppCoordinator(container: AppContainer())
     
+    /// Configures the application window and starts the app coordinator when the scene connects.
+    /// - Parameters:
+    ///   - scene: The scene being connected.
+    ///   - session: The session associated with the scene.
+    ///   - connectionOptions: The options used to configure the connection.
     func scene(
         _ scene: UIScene,
         willConnectTo session: UISceneSession,

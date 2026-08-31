@@ -53,6 +53,7 @@ final class MarketsViewController: BaseViewController<MarketsMainView> {
         fatalError("init(coder:) has not been implemented")
     }
     
+    /// Configures the markets view and starts loading market data when the view finishes loading.
     override func viewDidLoad() {
         super.viewDidLoad()
         
@@ -72,6 +73,7 @@ final class MarketsViewController: BaseViewController<MarketsMainView> {
 
 private extension MarketsViewController {
     
+    /// Binds view-model updates to the corresponding view-controller actions.
     func bindViewModel() {
         viewModel.onChange = { [weak self] in
             self?.applySnapshot()
@@ -94,6 +96,7 @@ private extension MarketsViewController {
         }
     }
     
+    /// Updates the collection view with the currently visible market symbols and empty-state message, applying any pending category transition animation.
     func applySnapshot() {
         mainView.setEmptyMessage(viewModel.emptyMessage)
         
@@ -115,6 +118,7 @@ private extension MarketsViewController {
         }
     }
     
+    /// Refreshes the visible market cells with the latest row data.
     func updateVisibleCells() {
         let collectionView = mainView.collectionView
         
@@ -131,6 +135,7 @@ private extension MarketsViewController {
         }
     }
     
+    /// Dismisses the search bar's keyboard without animating the layout update.
     func dismissSearchKeyboard() {
         guard mainView.searchBar.isFirstResponder else { return }
         
@@ -140,6 +145,7 @@ private extension MarketsViewController {
         }
     }
     
+    /// Configures the segment control with the available market categories and handles category selection changes.
     func configureSegmentControl() {
         let categories = viewModel.categories
         
@@ -175,10 +181,13 @@ private extension MarketsViewController {
 
 extension MarketsViewController: UISearchBarDelegate {
     
+    /// Updates the market search results for the entered text.
+    /// - Parameter searchText: The current search query.
     func searchBar(_ searchBar: UISearchBar, textDidChange searchText: String) {
         viewModel.search(searchText)
     }
     
+    /// Dismisses the keyboard after the search button is pressed.
     func searchBarSearchButtonClicked(_ searchBar: UISearchBar) {
         searchBar.resignFirstResponder()
     }
@@ -188,6 +197,10 @@ extension MarketsViewController: UISearchBarDelegate {
 
 extension MarketsViewController: UICollectionViewDelegate {
     
+    /// Handles selection of a market symbol and notifies the selection callback when a symbol is available.
+    /// - Parameters:
+    ///   - collectionView: The collection view containing the selected item.
+    ///   - indexPath: The index path of the selected item.
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
         collectionView.deselectItem(at: indexPath, animated: true)
         

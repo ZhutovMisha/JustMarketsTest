@@ -28,6 +28,8 @@ struct NetworkConfiguration {
         self.decoder = decoder
     }
 
+    /// Creates a JSON decoder configured for snake_case keys and ISO 8601 dates.
+    /// - Returns: A configured JSON decoder.
     static func makeDefaultDecoder() -> JSONDecoder {
         let decoder = JSONDecoder()
         decoder.keyDecodingStrategy = .convertFromSnakeCase

@@ -109,10 +109,13 @@ final class SymbolDetailMainView: BaseView {
         return view
     }()
     
+    /// Initializes the view's user interface.
     override func initialize() {
         setupUI()
     }
     
+    /// Updates the loading indicator's animation state.
+    /// - Parameter isAnimating: Whether the loading indicator should animate.
     func setAnimating(_ isAnimating: Bool) {
         if isAnimating {
             activityIndicator.startAnimating()
@@ -121,6 +124,8 @@ final class SymbolDetailMainView: BaseView {
         }
     }
     
+    /// Configures the view with symbol details, chart data, and quote and specification rows.
+    /// - Parameter config: The data used to populate the view.
     func configure(with config: Config) {
         configureHeader(with: config)
         configureChart(candles: config.candles, interval: config.interval)
@@ -133,6 +138,8 @@ final class SymbolDetailMainView: BaseView {
 
 private extension SymbolDetailMainView {
     
+    /// Configures the header with the symbol status, subtitle, price, and change information.
+    /// - Parameter config: The values displayed in the header.
     func configureHeader(with config: Config) {
         statusLabel.text = config.status
         statusLabel.isHidden = config.status == nil
@@ -144,6 +151,10 @@ private extension SymbolDetailMainView {
         changeLabel.textColor = config.changeColor
     }
     
+    /// Configures the candlestick chart with market candle data and interval-based date labels.
+    /// - Parameters:
+    ///   - candles: The market candles to display.
+    ///   - interval: The interval used to format the chart’s date labels.
     func configureChart(candles: [MarketCandle], interval: CandleInterval) {
         guard !candles.isEmpty else {
             chartView.data = nil
@@ -178,6 +189,10 @@ private extension SymbolDetailMainView {
         chartView.data = CandleChartData(dataSet: dataSet)
     }
     
+    /// Displays the provided information rows in the specified stack view.
+    /// - Parameters:
+    ///   - rows: The information rows to display.
+    ///   - stackView: The stack view to update.
     func configureRows(_ rows: [SymbolDetailInfoRow],in stackView: UIStackView) {
         stackView.arrangedSubviews.forEach { $0.removeFromSuperview() }
         
@@ -188,6 +203,7 @@ private extension SymbolDetailMainView {
         }
     }
     
+    /// Builds the view hierarchy and applies layout constraints for the symbol detail view.
     func setupUI() {
         backgroundColor = Theme.Colors.background
         

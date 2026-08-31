@@ -16,6 +16,9 @@ final class RemoteSymbolDetailsRepository: SymbolDetailsRepository {
         self.networkClient = networkClient
     }
     
+    /// Retrieves detailed market information for a symbol.
+    /// - Parameter symbol: The symbol whose market details should be retrieved.
+    /// - Returns: The market details for the symbol.
     func details(for symbol: String) async throws -> SymbolDetails {
         let dto = try await networkClient.request(
             MarketDetailsEndpoint.details(symbol: symbol),
@@ -25,6 +28,11 @@ final class RemoteSymbolDetailsRepository: SymbolDetailsRepository {
         return Self.map(dto)
     }
     
+    /// Retrieves candle data for a symbol and interval in ascending opening-time order.
+    /// - Parameters:
+    ///   - symbol: The symbol whose candle data is requested.
+    ///   - interval: The interval represented by each candle.
+    /// - Returns: Up to 100 candles sorted by ascending opening time.
     func candles(for symbol: String, interval: CandleInterval) async throws -> [MarketCandle] {
         let endpoint = MarketDetailsEndpoint.candles(
             symbol: symbol,
@@ -44,6 +52,8 @@ final class RemoteSymbolDetailsRepository: SymbolDetailsRepository {
 
 private extension RemoteSymbolDetailsRepository {
     
+    /// Converts symbol details data into the corresponding domain model.
+    — Returns: The mapped symbol details.
     static func map(_ dto: SymbolDetailsDTO) -> SymbolDetails {
         SymbolDetails(
             name: dto.name,
@@ -57,6 +67,7 @@ private extension RemoteSymbolDetailsRepository {
         )
     }
     
+    /// Converts an OHLC bar response into a market candle.
     static func map(_ dto: OhlcResponseDTO.Bar) -> MarketCandle {
         MarketCandle(
             openTime: dto.openTime,

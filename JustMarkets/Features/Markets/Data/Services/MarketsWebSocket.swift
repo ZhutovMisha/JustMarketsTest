@@ -12,22 +12,30 @@ private final class MarketsHubDelegate: HubConnectionDelegate {
     
     var onStateChanged: MarketsQuotesDataSource.OnConnectionChanged?
     
+    /// Reports that the hub connection has opened.
+    /// - Parameter hubConnection: The hub connection that opened.
     func connectionDidOpen(hubConnection: HubConnection) {
         onStateChanged?(.connected)
     }
     
+    /// Reports that the connection could not be opened.
     func connectionDidFailToOpen(error: Error) {
         onStateChanged?(.disconnected)
     }
     
+    /// Reports that the connection has closed.
+    /// - Parameter error: The error associated with closing the connection, if any.
     func connectionDidClose(error: Error?) {
         onStateChanged?(.disconnected)
     }
     
+    /// Reports that the connection is attempting to reconnect.
+    /// - Parameter error: The error that caused the reconnection attempt.
     func connectionWillReconnect(error: Error) {
         onStateChanged?(.connecting)
     }
     
+    /// Notifies observers that the connection has been re-established.
     func connectionDidReconnect() {
         onStateChanged?(.connected)
     }
@@ -78,6 +86,8 @@ final class MarketsWebSocket: MarketsQuotesDataSource {
         }
     }
     
+    /// Starts the market data connection for the specified symbols or updates the existing subscription.
+    /// - Parameter symbols: The market symbols to subscribe to.
     func connect(symbols: [String]) {
         guard !isStarted else {
             guard symbols != self.symbols else { return }
@@ -95,6 +105,7 @@ final class MarketsWebSocket: MarketsQuotesDataSource {
         hubConnection.start()
     }
     
+    /// Disconnects from the market data stream and clears the subscribed symbols.
     func disconnect() {
         isStarted = false
         symbols = []
@@ -102,6 +113,8 @@ final class MarketsWebSocket: MarketsQuotesDataSource {
         hubConnection.stop()
     }
     
+    /// Processes a connection state update, forwards it to observers, and subscribes to the configured symbols when connected.
+    /// - Parameter state: The current market connection state.
     private func handle(_ state: MarketConnectionState) {
         if state == .disconnected {
             // Terminal: SignalR has exhausted its retry ladder and closed. The
@@ -117,6 +130,8 @@ final class MarketsWebSocket: MarketsQuotesDataSource {
         subscribe()
     }
     
+    /// Subscribes to updates for the configured symbols.
+    /// An invocation failure transitions the connection to the disconnected state.
     private func subscribe() {
         guard !symbols.isEmpty else { return }
         

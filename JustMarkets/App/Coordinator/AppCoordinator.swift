@@ -33,6 +33,8 @@ final class AppCoordinator {
         networkTask?.cancel()
     }
     
+    /// Starts the application by displaying the splash screen and transitioning to the markets flow when it finishes.
+    /// - Parameter window: The window in which to display the application interface.
     func start(in window: UIWindow) {
         self.window = window
         
@@ -50,6 +52,7 @@ final class AppCoordinator {
 
 private extension AppCoordinator {
     
+    /// Displays the markets module as the application’s root view.
     func showMarkets() {
         guard let window else { return }
         
@@ -64,6 +67,8 @@ private extension AppCoordinator {
         }
     }
     
+    /// Creates the markets view controller and configures symbol selection and feed connection state handling.
+    /// - Returns: The markets view controller.
     func makeMarkets() -> UIViewController {
         let markets = container.makeMarketsModule()
         
@@ -90,6 +95,8 @@ private extension AppCoordinator {
         return markets
     }
     
+    /// Displays the details screen for the specified market symbol.
+    /// - Parameter symbol: The market symbol whose details should be displayed.
     func showDetails(for symbol: MarketSymbol) {
         navigationController.pushViewController(
             container.makeSymbolDetailModule(symbol: symbol),
@@ -102,6 +109,8 @@ private extension AppCoordinator {
 
 private extension AppCoordinator {
     
+    /// Observes network connectivity changes and updates the application status accordingly.
+    /// - Parameter monitor: The monitor that provides network connectivity updates.
     func observeNetwork(_ monitor: NetworkMonitor) {
         networkTask = Task { [weak self] in
             for await isConnected in monitor.isConnected() {
@@ -113,6 +122,7 @@ private extension AppCoordinator {
         }
     }
     
+    /// Updates the navigation status based on network and feed connectivity, indicating connection loss, recovery, or normal availability.
     func updateStatus() {
         let isConnected = isNetworkAvailable && isFeedConnected
         
