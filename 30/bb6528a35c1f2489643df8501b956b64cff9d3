@@ -1,0 +1,23 @@
+JustMarkets/App/Coordinator/AppCoordinator.swift
+  s_3050499403f826::t_c068ccf0f88c6d 29
+JustMarkets/App/Assembly/ServiceAssembler.swift
+  s_3050499403f826::t_73bd474a6e1dd0 1-40
+JustMarkets/App/Assembly/AppContainer.swift
+  s_3050499403f826::t_73bd474a6e1dd0 11,13,16,26-27,39-40
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.6.10",
+  "base_commit_sha": "30bb6528a35c1f2489643df8501b956b64cff9d3",
+  "prompts": {},
+  "sessions": {
+    "s_3050499403f826": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "41ae1df1-88ae-4e1e-9c24-e296e9389f0e",
+        "model": "claude-opus-5"
+      },
+      "human_author": "Mykhailo Zhutov <zhutov.misha@gmail.com>"
+    }
+  }
+}
