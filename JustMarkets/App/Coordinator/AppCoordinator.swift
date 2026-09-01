@@ -26,7 +26,7 @@ final class AppCoordinator {
     init(container: AppContainer) {
         self.container = container
         
-        observeNetwork(container.networkMonitor)
+        observeNetwork(container.services.networkMonitor)
     }
     
     deinit {

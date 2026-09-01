@@ -8,32 +8,12 @@
 @MainActor
 final class AppContainer {
     
-    let networkMonitor: NetworkMonitor
+    lazy var services = ServiceAssembler(configuration: configuration)
     
-    private let networkClient: NetworkClient
-    private let coreDataStack: CoreDataStack
-    private let marketsRepository: MarketsRepository
-    private let favoritesRepository: FavoritesRepository
-    private let symbolDetailsRepository: RemoteSymbolDetailsRepository
+    private let configuration: NetworkConfiguration
     
     init(configuration: NetworkConfiguration = .production) {
-        do {
-            coreDataStack = try CoreDataStack()
-        } catch {
-            fatalError("Failed to load the local store: \(error)")
-        }
-        
-        networkMonitor = NetworkMonitor()
-        networkClient = AFNetworkClient(configuration: configuration)
-        
-        marketsRepository = RemoteMarketsRepository(
-            networkClient: networkClient,
-            quotesDataSource: MarketsWebSocket(),
-            throttle: TickThrottle()
-        )
-        
-        favoritesRepository = CoreDataFavoritesRepository(stack: coreDataStack)
-        symbolDetailsRepository = RemoteSymbolDetailsRepository(networkClient: networkClient)
+        self.configuration = configuration
     }
     
     func makeSplashModule() -> SplashViewController {
@@ -43,8 +23,8 @@ final class AppContainer {
     func makeMarketsModule() -> MarketsViewController {
         let viewModel = MarketsViewModel(
             dependencies: .init(
-                marketsRepository: marketsRepository,
-                favoritesRepository: favoritesRepository,
+                marketsRepository: services.marketsRepository,
+                favoritesRepository: services.favoritesRepository,
                 processor: MarketsProcessor()
             )
         )
@@ -56,8 +36,8 @@ final class AppContainer {
         let viewModel = SymbolDetailViewModel(
             symbol: symbol,
             dependencies: .init(
-                detailsRepository: symbolDetailsRepository,
-                marketsRepository: marketsRepository,
+                detailsRepository: services.symbolDetailsRepository,
+                marketsRepository: services.marketsRepository,
                 processor: MarketsProcessor()
             )
         )
