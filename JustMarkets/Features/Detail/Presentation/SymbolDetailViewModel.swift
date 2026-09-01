@@ -106,7 +106,6 @@ final class SymbolDetailViewModel {
         onEvent?(.loading(true))
         
         defer {
-            // A newer load already owns the indicator.
             if !Task.isCancelled {
                 onEvent?(.loading(false))
             }
@@ -150,7 +149,6 @@ final class SymbolDetailViewModel {
         onEvent?(.loading(true))
         
         defer {
-            // A newer load already owns the indicator.
             if !Task.isCancelled {
                 onEvent?(.loading(false))
             }

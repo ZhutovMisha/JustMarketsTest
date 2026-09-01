@@ -10,7 +10,6 @@
 @MainActor
 final class MarketsEventSpy {
     
-    // Event cannot be Equatable — it carries an Error.
     enum Message: Equatable {
         
         case changed

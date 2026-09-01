@@ -54,8 +54,6 @@ final class StatusNavigationController: UINavigationController {
 
 private extension StatusNavigationController {
     
-    /// A push or pop already owns the navigation bar: repainting it mid-flight
-    /// is what makes the bar flicker, so the status waits for the transition.
     func applyStatus() {
         guard let coordinator = transitionCoordinator else {
             updateAppearance()
@@ -84,8 +82,6 @@ private extension StatusNavigationController {
         navigationBar.compactAppearance = appearance
     }
     
-    /// The status replaces the root title only. A pushed screen keeps its own
-    /// title — the bar colour is what reports the connection there.
     func updateRootTitle() {
         guard let root = viewControllers.first else { return }
         
