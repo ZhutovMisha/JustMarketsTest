@@ -5,6 +5,7 @@
 //  Created by Zhutov Mykhailo on 30.08.2026.
 //
 
+@MainActor
 final class AppContainer {
     
     let networkMonitor: NetworkMonitor

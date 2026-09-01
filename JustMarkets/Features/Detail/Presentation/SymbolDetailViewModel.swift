@@ -7,12 +7,18 @@
 
 import Foundation
 
+@MainActor
 final class SymbolDetailViewModel {
     
-    typealias OnChange = () -> Void
-    typealias OnLoadingChanged = (Bool) -> Void
-    typealias OnQuoteChanged = () -> Void
-    typealias OnError = (Error) -> Void
+    typealias OnEvent = (Event) -> Void
+  
+    enum Event {
+        
+        case changed
+        case quoteChanged
+        case loading(Bool)
+        case failed(Error)
+    }
     
     struct Dependencies {
         
@@ -21,10 +27,7 @@ final class SymbolDetailViewModel {
         let processor: MarketsProcessor
     }
     
-    var onChange: OnChange?
-    var onLoadingChanged: OnLoadingChanged?
-    var onQuoteChanged: OnQuoteChanged?
-    var onError: OnError?
+    var onEvent: OnEvent?
     
     let symbol: MarketSymbol
     let intervals = CandleInterval.allCases
@@ -100,12 +103,12 @@ final class SymbolDetailViewModel {
     }
     
     private func performLoad() async {
-        onLoadingChanged?(true)
+        onEvent?(.loading(true))
         
         defer {
             // A newer load already owns the indicator.
             if !Task.isCancelled {
-                onLoadingChanged?(false)
+                onEvent?(.loading(false))
             }
         }
         
@@ -121,13 +124,13 @@ final class SymbolDetailViewModel {
             self.details = loadedDetails
             self.candles = loadedCandles
             
-            onChange?()
+            onEvent?(.changed)
             
             observeQuotes()
         } catch {
             guard !Task.isCancelled else { return }
             
-            onError?(error)
+            onEvent?(.failed(error))
         }
     }
     
@@ -144,12 +147,12 @@ final class SymbolDetailViewModel {
     }
     
     private func performLoadCandles(for interval: CandleInterval) async {
-        onLoadingChanged?(true)
+        onEvent?(.loading(true))
         
         defer {
             // A newer load already owns the indicator.
             if !Task.isCancelled {
-                onLoadingChanged?(false)
+                onEvent?(.loading(false))
             }
         }
         
@@ -160,11 +163,11 @@ final class SymbolDetailViewModel {
             
             candles = loaded
             
-            onChange?()
+            onEvent?(.changed)
         } catch {
             guard !Task.isCancelled else { return }
             
-            onError?(error)
+            onEvent?(.failed(error))
         }
     }
     
@@ -199,6 +202,6 @@ final class SymbolDetailViewModel {
     
     private func apply(_ quote: MarketQuote) {
         self.quote = quote
-        onQuoteChanged?()
+        onEvent?(.quoteChanged)
     }
 }

@@ -32,20 +32,19 @@ final class SymbolDetailViewController: BaseViewController<SymbolDetailMainView>
     }
     
     private func bindViewModel() {
-        viewModel.onChange = { [weak self] in
-            self?.render()
-        }
-        
-        viewModel.onQuoteChanged = { [weak self] in
-            self?.render()
-        }
-        
-        viewModel.onLoadingChanged = { [weak self] isLoading in
-            self?.mainView.setAnimating(isLoading)
-        }
-        
-        viewModel.onError = { [weak self] error in
-            self?.showAlert(message: error.localizedDescription)
+        viewModel.onEvent = { [weak self] event in
+            guard let self else { return }
+            
+            switch event {
+            case .changed, .quoteChanged:
+                render()
+                
+            case .loading(let isLoading):
+                mainView.setAnimating(isLoading)
+                
+            case .failed(let error):
+                showAlert(message: error.localizedDescription)
+            }
         }
     }
     

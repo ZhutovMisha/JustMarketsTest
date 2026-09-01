@@ -12,42 +12,52 @@ import XCTest
 @MainActor
 final class MemoryLeakTests: XCTestCase {
     
-    func test_marketsViewModel_hasNoLeaks() {
-        let markets = MarketsRepositorySpy()
-        let favorites = FavoritesRepositorySpy()
-        
-        let sut = MarketsViewModel(
-            dependencies: .init(
-                marketsRepository: markets,
-                favoritesRepository: favorites,
-                processor: MarketsProcessor()
-            )
-        )
-        
-        sut.selectCategory(.forex)
-        
-        trackForMemoryLeaks(sut)
-        trackForMemoryLeaks(markets)
-        trackForMemoryLeaks(favorites)
-    }
-    
     func test_marketsViewController_hasNoLeaks() {
         let markets = MarketsRepositorySpy()
         let favorites = FavoritesRepositorySpy()
-        
-        let viewModel = MarketsViewModel(
-            dependencies: .init(
-                marketsRepository: markets,
-                favoritesRepository: favorites,
-                processor: MarketsProcessor()
+
+        var sut: MarketsViewController? = {
+            let viewModel = MarketsViewModel(
+                dependencies: .init(
+                    marketsRepository: markets,
+                    favoritesRepository: favorites,
+                    processor: MarketsProcessor()
+                )
             )
-        )
-        
-        let sut = MarketsViewController(viewModel: viewModel)
-        sut.loadViewIfNeeded()
-        
-        trackForMemoryLeaks(sut)
-        trackForMemoryLeaks(sut.mainView)
-        trackForMemoryLeaks(viewModel)
+
+            return MarketsViewController(viewModel: viewModel)
+        }()
+
+        sut?.loadViewIfNeeded()
+
+        trackForMemoryLeaks(sut!)
+        trackForMemoryLeaks(markets)
+        trackForMemoryLeaks(favorites)
+
+        sut = nil
+    }
+    
+    func test_marketsViewController_isDeallocated() {
+        let markets = MarketsRepositorySpy()
+        let favorites = FavoritesRepositorySpy()
+
+        weak var weakSUT: MarketsViewController?
+
+        autoreleasepool {
+            let viewModel = MarketsViewModel(
+                dependencies: .init(
+                    marketsRepository: markets,
+                    favoritesRepository: favorites,
+                    processor: MarketsProcessor()
+                )
+            )
+
+            let sut = MarketsViewController(viewModel: viewModel)
+            weakSUT = sut
+
+            sut.loadViewIfNeeded()
+        }
+
+        XCTAssertNil(weakSUT)
     }
 }

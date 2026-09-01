@@ -65,12 +65,11 @@ struct MarketsViewModelTests {
         
         await loadAndWait(sut)
         
-        var didUpdateRows = false
-        sut.onRowsUpdated = { didUpdateRows = true }
+        let events = MarketsEventSpy(sut)
         
         markets.emit(.quotes([makeQuote("EURUSD", price: 1.1, change: -3.01)]))
         
-        await wait { didUpdateRows }
+        await wait { events.messages.contains(.rowsUpdated) }
         #expect(sut.row(for: makeSymbol("EURUSD", digits: 5)).price == "1.10")
         #expect(sut.row(for: makeSymbol("EURUSD", digits: 5)).change == "-3.01%")
     }
@@ -92,6 +91,19 @@ struct MarketsViewModelTests {
         
         #expect(favorites.messages == [.favorites, .toggle("EURUSD")])
         #expect(sut.row(for: makeSymbol("EURUSD")).isFavorite)
+    }
+    
+    @Test
+    func loadMarkets_always_emitsEventsInRenderThenSubscribeOrder() async {
+        let (sut, markets, _) = makeSUT()
+        markets.symbolsResult = .success([makeSymbol("BTCUSD", type: .crypto)])
+        
+        let events = MarketsEventSpy(sut)
+        
+        await loadAndWait(sut)
+        
+        #expect(events.messages == [.loading(true), .changed, .loading(false)])
+        #expect(markets.messages == [.fetchSymbols, .observeUpdates(["BTCUSD"])])
     }
 }
 

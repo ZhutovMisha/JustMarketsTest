@@ -73,24 +73,25 @@ final class MarketsViewController: BaseViewController<MarketsMainView> {
 private extension MarketsViewController {
     
     func bindViewModel() {
-        viewModel.onChange = { [weak self] in
-            self?.applySnapshot()
-        }
-        
-        viewModel.onRowsUpdated = { [weak self] in
-            self?.updateVisibleCells()
-        }
-        
-        viewModel.onLoadingChanged = { [weak self] isLoading in
-            self?.mainView.setAnimating(isLoading)
-        }
-        
-        viewModel.onConnectionChanged = { [weak self] state in
-            self?.onConnectionStateChanged?(state)
-        }
-        
-        viewModel.onError = { [weak self] error in
-            self?.showAlert(message: error.localizedDescription)
+        viewModel.onEvent = { [weak self] event in
+            guard let self else { return }
+            
+            switch event {
+            case .changed:
+                applySnapshot()
+                
+            case .rowsUpdated:
+                updateVisibleCells()
+                
+            case .loading(let isLoading):
+                mainView.setAnimating(isLoading)
+                
+            case .connection(let state):
+                onConnectionStateChanged?(state)
+                
+            case .failed(let error):
+                showAlert(message: error.localizedDescription)
+            }
         }
     }
     

@@ -22,5 +22,6 @@ ask "why on earth is it done this way". Not for routine fixes.
 | [0010](0010-use-case-shape.md) | One protocol, one `execute`, extracted on a second caller | Superseded by 0011 |
 | [0011](0011-no-use-case-layer.md) | No use-case layer — ViewModels call repositories | Accepted |
 | [0012](0012-explicit-mainactor.md) | Explicit `@MainActor` instead of default isolation | Accepted |
+| [0013](0013-single-event-channel.md) | One event channel per ViewModel instead of separate callbacks | Accepted |
 
 Numbering is sequential and never reused. Use [the template](template.md).

@@ -10,11 +10,16 @@ import Foundation
 @MainActor
 final class MarketsViewModel {
     
-    typealias OnChange = () -> Void
-    typealias OnLoadingChanged = (Bool) -> Void
-    typealias OnRowsUpdated = () -> Void
-    typealias OnConnectionChanged = (MarketConnectionState) -> Void
-    typealias OnError = (Error) -> Void
+    typealias OnEvent = (Event) -> Void
+    
+    enum Event {
+        
+        case changed
+        case rowsUpdated
+        case loading(Bool)
+        case connection(MarketConnectionState)
+        case failed(Error)
+    }
     
     struct Dependencies {
         
@@ -23,11 +28,7 @@ final class MarketsViewModel {
         let processor: MarketsProcessor
     }
     
-    var onChange: OnChange?
-    var onLoadingChanged: OnLoadingChanged?
-    var onRowsUpdated: OnRowsUpdated?
-    var onConnectionChanged: OnConnectionChanged?
-    var onError: OnError?
+    var onEvent: OnEvent?
     
     let categories = MarketCategory.allCases
     
@@ -97,12 +98,12 @@ final class MarketsViewModel {
                 return
             }
             
-            onLoadingChanged?(true)
+            onEvent?(.loading(true))
             
             defer {
                 // A newer load already owns the indicator.
                 if !Task.isCancelled {
-                    onLoadingChanged?(false)
+                    onEvent?(.loading(false))
                 }
             }
             
@@ -118,16 +119,13 @@ final class MarketsViewModel {
                 symbols = loaded
                 favorites = try dependencies.favoritesRepository.favorites()
                 
-                refreshVisibleSymbols()
-                onChange?()
-                
-                resubscribeIfNeeded()
+                publishChange()
             } catch {
                 guard !Task.isCancelled else {
                     return
                 }
                 
-                onError?(error)
+                onEvent?(.failed(error))
             }
         }
     }
@@ -139,9 +137,7 @@ final class MarketsViewModel {
         
         selectedCategory = category
         
-        refreshVisibleSymbols()
-        onChange?()
-        resubscribeIfNeeded()
+        publishChange()
     }
     
     func search(_ query: String) {
@@ -162,11 +158,9 @@ final class MarketsViewModel {
         do {
             favorites = try dependencies.favoritesRepository.toggle(symbol)
             
-            refreshVisibleSymbols()
-            onChange?()
-            resubscribeIfNeeded()
+            publishChange()
         } catch {
-            onError?(error)
+            onEvent?(.failed(error))
         }
     }
 }
@@ -183,7 +177,15 @@ private extension MarketsViewModel {
         self.query = query
         
         refreshVisibleSymbols()
-        onChange?()
+        onEvent?(.changed)
+    }
+    
+    // Order matters: emitting `.changed` after resubscribing would render a
+    // list whose symbols the feed has not caught up with yet.
+    func publishChange() {
+        refreshVisibleSymbols()
+        onEvent?(.changed)
+        resubscribeIfNeeded()
     }
     
     func refreshVisibleSymbols() {
@@ -227,10 +229,10 @@ private extension MarketsViewModel {
                 self.quotes[quote.symbol] = quote
             }
             
-            onRowsUpdated?()
+            onEvent?(.rowsUpdated)
             
         case .connection(let state):
-            onConnectionChanged?(state)
+            onEvent?(.connection(state))
         }
     }
 }

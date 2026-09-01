@@ -80,12 +80,12 @@ func makeTick(
 func loadAndWait(_ sut: MarketsViewModel, sourceLocation: SourceLocation = #_sourceLocation) async {
     var isFinished = false
     
-    let previous = sut.onLoadingChanged
+    let previous = sut.onEvent
     
-    sut.onLoadingChanged = { isLoading in
-        previous?(isLoading)
+    sut.onEvent = { event in
+        previous?(event)
         
-        if !isLoading {
+        if case .loading(false) = event {
             isFinished = true
         }
     }
@@ -94,5 +94,5 @@ func loadAndWait(_ sut: MarketsViewModel, sourceLocation: SourceLocation = #_sou
     
     await wait(sourceLocation: sourceLocation) { isFinished }
     
-    sut.onLoadingChanged = previous
+    sut.onEvent = previous
 }
