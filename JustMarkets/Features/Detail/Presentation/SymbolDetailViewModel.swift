@@ -7,7 +7,6 @@
 
 import Foundation
 
-@MainActor
 final class SymbolDetailViewModel {
     
     typealias OnChange = () -> Void

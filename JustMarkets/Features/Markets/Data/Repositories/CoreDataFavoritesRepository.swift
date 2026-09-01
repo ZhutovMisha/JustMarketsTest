@@ -7,7 +7,6 @@
 
 import CoreData
 
-@MainActor
 final class CoreDataFavoritesRepository: FavoritesRepository {
     
     private let stack: CoreDataStack
@@ -44,8 +43,6 @@ final class CoreDataFavoritesRepository: FavoritesRepository {
         do {
             try stack.save()
         } catch {
-            // Otherwise the change stays pending in the view context: later
-            // reads see it, and the next successful save commits it silently.
             context.rollback()
             
             throw error

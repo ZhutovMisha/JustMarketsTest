@@ -7,7 +7,6 @@
 
 import Foundation
 
-@MainActor
 final class RemoteMarketsRepository: MarketsRepository {
     
     private let networkClient: NetworkClient

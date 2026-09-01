@@ -5,7 +5,6 @@
 //  Created by Zhutov Mykhailo on 30.08.2026.
 //
 
-@MainActor
 final class RemoteSymbolDetailsRepository: SymbolDetailsRepository {
     
     private static let candlesLimit = 100

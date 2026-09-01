@@ -6,7 +6,6 @@
 //
 import Foundation
 
-@MainActor
 final class TickThrottle {
     
     typealias OnTicks = ([MarketTickDTO]) -> Void
