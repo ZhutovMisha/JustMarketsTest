@@ -179,7 +179,9 @@ final class MarketCollectionViewCell: BaseCollectionViewCell {
         changeLabel.text = row.change
         changeLabel.textColor = color(for: row.trend)
         configureStatus(row.status)
-        favoriteButton.isSelected = row.isFavorite
+        UIView.performWithoutAnimation {
+            favoriteButton.isSelected = row.isFavorite
+        }
         separator.isHidden = !showsSeparator
         
         guard priceLabel.text != row.price else { return }
